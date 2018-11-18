@@ -2,6 +2,11 @@
 
 renderNavArrows();
 
+const KeyCodes = {
+  LEFT: 37,
+  RIGHT: 39
+};
+
 const sectionMain = document.querySelector(`.main`);
 const views = Array.from(document.querySelectorAll(`template`));
 
@@ -23,15 +28,13 @@ function toggleView(direction) {
   switch (direction) {
     case `left`:
       if (viewActiveNumber > 0) {
-        viewActiveNumber--;
-        renderViewByNumber(viewActiveNumber);
+        renderViewByNumber(--viewActiveNumber);
       }
       break;
 
     case `right`:
       if (viewActiveNumber < views.length) {
-        viewActiveNumber++;
-        renderViewByNumber(viewActiveNumber);
+        renderViewByNumber(++viewActiveNumber);
       }
       break;
   }
@@ -62,8 +65,7 @@ function renderNavArrows() {
     </div>
   `;
 
-  const leftArrowBtn = document.querySelectorAll(`.arrows__btn`)[0];
-  const rightArrowBtn = document.querySelectorAll(`.arrows__btn`)[1];
+  const [leftArrowBtn, rightArrowBtn] = document.querySelectorAll(`.arrows__btn`);
 
   leftArrowBtn.addEventListener(`click`, () => toggleView(`left`));
   rightArrowBtn.addEventListener(`click`, () => toggleView(`right`));
@@ -71,10 +73,10 @@ function renderNavArrows() {
 
 
 // Обработчики клавиатуры
-document.addEventListener(`keydown`, (e) => {
-  if (e.keyCode === 39) {
+document.addEventListener(`keydown`, (evt) => {
+  if (evt.keyCode === KeyCodes.RIGHT) {
     toggleView(`right`);
-  } else if (e.keyCode === 37) {
+  } else if (evt.keyCode === KeyCodes.LEFT) {
     toggleView(`left`);
   }
 });
