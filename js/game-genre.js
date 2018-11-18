@@ -93,7 +93,7 @@ replayBtn.addEventListener(`click`, () => renderView(welcomeView));
 
 trackCheckboxes.forEach((checkbox) => {
   checkbox.addEventListener(`change`, () => {
-    answerBtn.disabled = formValidation() ? false : true;
+    answerBtn.disabled = !formValidation();
   });
 });
 
