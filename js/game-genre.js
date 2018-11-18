@@ -82,7 +82,7 @@ const template = `
 </section>`;
 
 const view = getElementFromTemplate(template);
-const trackCheckboxes = Array.from(view.querySelectorAll(`.game__input`));
+const tracksForm = view.querySelector(`.game__tracks`);
 const answerBtn = view.querySelector(`.game__submit`);
 const replayBtn = view.querySelector(`.game__back`);
 
@@ -91,10 +91,10 @@ answerBtn.addEventListener(`click`, () => renderView(gameArtistView));
 
 replayBtn.addEventListener(`click`, () => renderView(welcomeView));
 
-trackCheckboxes.forEach((checkbox) => {
-  checkbox.addEventListener(`change`, () => {
+tracksForm.addEventListener(`change`, (evt) => {
+  if (evt.target.classList.contains(`game__input`)) {
     answerBtn.disabled = !formValidation();
-  });
+  }
 });
 
 // для перехода дальше хотя бы один чекбокс должен быть включен

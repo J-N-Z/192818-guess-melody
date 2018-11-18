@@ -66,13 +66,13 @@ const template = `
 </section>`;
 
 const view = getElementFromTemplate(template);
-const artists = Array.from(view.querySelectorAll(`.artist__input`));
+const artistsForm = view.querySelector(`.game__artist`);
 const replayBtn = view.querySelector(`.game__back`);
 
-artists.forEach((checkbox) => {
-  checkbox.addEventListener(`change`, () => {
+artistsForm.addEventListener(`change`, (evt) => {
+  if (evt.target.classList.contains(`artist__input`)) {
     renderView(getRandomEndView());
-  });
+  }
 });
 
 replayBtn.addEventListener(`click`, () => renderView(welcomeView));
