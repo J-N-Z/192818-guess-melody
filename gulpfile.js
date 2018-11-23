@@ -14,19 +14,6 @@ const sourcemaps = require(`gulp-sourcemaps`);
 const mocha = require(`gulp-mocha`); // Добавим установленный gulp-mocha плагин
 const commonjs = require(`rollup-plugin-commonjs`); // Добавим плагин для работы с `commonjs` модулями
 
-gulp.task(`test`, function () {
-  return gulp
-  .src([`js/**/*.test.js`])
-  .pipe(rollup({
-    plugins: [
-      commonjs() // Сообщает Rollup, что модули можно загружать из node_modules
-    ]}, `cjs`)) // Выходной формат тестов — `CommonJS` модуль
-  .pipe(gulp.dest(`build/test`))
-  .pipe(mocha({
-    reporter: `spec` // Вид в котором я хочу отображать результаты тестирования
-  }));
-});
-
 gulp.task(`style`, () => {
   return gulp.src(`sass/style.scss`).
     pipe(plumber()).
@@ -118,5 +105,15 @@ gulp.task(`build`, [`assemble`], () => {
   gulp.start(`imagemin`);
 });
 
-gulp.task(`test`, () => {
+gulp.task(`test`, function () {
+  return gulp
+  .src([`js/**/*.test.js`])
+  .pipe(rollup({
+    plugins: [
+      commonjs() // Сообщает Rollup, что модули можно загружать из node_modules
+    ]}, `cjs`)) // Выходной формат тестов — `CommonJS` модуль
+  .pipe(gulp.dest(`build/test`))
+  .pipe(mocha({
+    reporter: `spec` // Вид в котором я хочу отображать результаты тестирования
+  }));
 });
