@@ -1,24 +1,7 @@
 import {assert} from 'chai';
+import {getResults} from '../utils';
 
 const gameStatistics = [4, 5, 8, 10, 11];
-
-function getResults(statistics, currentResult) {
-  if (currentResult.time === 0) {
-    return `Время вышло! Вы не успели отгадать все мелодии`;
-  }
-  if (currentResult.lives === 0) {
-    return `У вас закончились все попытки. Ничего, повезёт в следующий раз!`;
-  }
-
-  const stats = [...statistics];
-  stats.push(currentResult.score);
-
-  const sortedStats = stats.sort((a, b) => b - a);
-  const rank = sortedStats.indexOf(currentResult.score) + 1;
-  const beatenPercents = (sortedStats.length - rank) / (sortedStats.length - 1) * 100;
-
-  return `Вы заняли ${rank} место из ${sortedStats.length} игроков. Это лучше, чем у ${beatenPercents}% игроков`;
-}
 
 const gamerResults1 = {
   score: 10,

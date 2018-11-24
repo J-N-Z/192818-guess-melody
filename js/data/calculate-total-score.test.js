@@ -1,25 +1,5 @@
 import {assert} from 'chai';
-
-const QUESTIONS_AMOUNT = 10;
-const LIVES = 3;
-
-function calculateTotalScore(answersArr, lives) {
-  let totalScore = -1;
-
-  if (answersArr.length === QUESTIONS_AMOUNT) {
-    const rightAnswers = answersArr.filter((answer) => answer.right);
-    const mistakes = LIVES - lives;
-    const fastAnswers = answersArr.filter((answer) => answer.time < 30);
-
-    totalScore = rightAnswers.length - mistakes * 2;
-    if (fastAnswers.length > 0) {
-      totalScore += fastAnswers.length;
-    }
-    return totalScore;
-  }
-
-  return totalScore;
-}
+import {calculateTotalScore} from '../utils';
 
 const answersArr1 = [
   {right: true, time: 40}
