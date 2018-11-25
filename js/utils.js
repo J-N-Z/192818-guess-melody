@@ -64,3 +64,7 @@ export function decreaseLives(_lives) {
 export function timeCountdown(_seconds) {
   return --_seconds;
 }
+
+export function addLeadZero(number) {
+  return number.toString().length < 2 ? `0${number}` : number;
+}
