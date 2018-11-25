@@ -79,5 +79,3 @@ describe(`Calculate total score`, () => {
     assert.equal(8, calculateTotalScore(answersArr5, 1));
   });
 });
-
-
