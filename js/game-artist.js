@@ -1,6 +1,7 @@
 import {getElementFromTemplate} from './utils.js';
 import {renderView} from './utils.js';
 import resultSuccessView from './result-success.js';
+import gameGenreView from './game-genre.js';
 import welcomeView from './welcome.js';
 import failTriesView from './fail-tries.js';
 import failTimeView from './fail-time.js';
@@ -8,7 +9,7 @@ import header from './header.js';
 import state from './data';
 
 
-const artists = state.questions[state.level + 1].answers.map((artist, index) => `
+const artists = state.questions[5].answers.map((artist, index) => `
   <div class="artist">
     <input class="artist__input visually-hidden" type="radio" name="answer" value="${artist.name}" id="answer-${index}">
     <label class="artist__name" for="answer-${index}">
@@ -40,7 +41,13 @@ const replayBtn = view.querySelector(`.game__back`);
 
 artistsForm.addEventListener(`change`, (evt) => {
   if (evt.target.classList.contains(`artist__input`)) {
-    renderView(getRandomEndView());
+    // renderView(getRandomEndView());
+    if (state.level < 10) {
+      state.level++;
+      renderView(gameGenreView);
+    } else {
+      renderView(getRandomEndView());
+    }
   }
 });
 

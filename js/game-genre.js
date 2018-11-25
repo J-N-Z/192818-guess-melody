@@ -2,15 +2,18 @@ import {getElementFromTemplate} from './utils.js';
 import {renderView} from './utils.js';
 import gameArtistView from './game-artist.js';
 import welcomeView from './welcome.js';
+import failTriesView from './fail-tries.js';
 import header from './header.js';
 import state from './data';
 
+window.state = state;
 
-const tracks = state.questions[state.level].answers.map((track, index) => `
+
+const tracks = state.questions[0].answers.map((track, index) => `
 <div class="track">
   <button class="track__button track__button--play" type="button"></button>
   <div class="track__status">
-    <audio></audio>
+    <audio src="${track.src}"></audio>
   </div>
   <div class="game__answer">
     <input class="game__input visually-hidden" type="checkbox" name="answer" value="${track.genre}" id="answer-${index}">
@@ -38,7 +41,12 @@ const replayBtn = view.querySelector(`.game__back`);
 
 answerBtn.disabled = true;
 answerBtn.addEventListener(`click`, () => {
-  renderView(gameArtistView);
+  if (state.level < 10) {
+    state.level++;
+    renderView(gameArtistView);
+  } else {
+    renderView(failTriesView);
+  }
 });
 
 replayBtn.addEventListener(`click`, () => renderView(welcomeView));
