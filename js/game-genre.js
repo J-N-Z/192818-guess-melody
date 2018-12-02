@@ -1,65 +1,83 @@
-import {getElementFromTemplate} from './utils.js';
-import {renderView} from './utils.js';
-import gameArtistView from './game-artist.js';
-import welcomeView from './welcome.js';
-import failTriesView from './fail-tries.js';
+import AbstractView from './abstract-view';
 import header from './header.js';
 import state from './data';
 
 window.state = state;
 
+class GameGenreView extends AbstractView {
+  get template() {
+    const tracks = state.questions[0].answers.map((track, index) => `
+    <div id="${index}"class="track">
+      <button class="track__button track__button--play" type="button"></button>
+      <div class="track__status">
+        <audio src="${track.src}"></audio>
+      </div>
+      <div class="game__answer">
+        <input class="game__input visually-hidden" type="checkbox" name="answer" value="${track.genre}" id="answer-${index}">
+        <label class="game__check" for="answer-${index}">Отметить</label>
+      </div>
+    </div>`
+    ).join(``);
 
-const tracks = state.questions[0].answers.map((track, index) => `
-<div class="track">
-  <button class="track__button track__button--play" type="button"></button>
-  <div class="track__status">
-    <audio src="${track.src}"></audio>
-  </div>
-  <div class="game__answer">
-    <input class="game__input visually-hidden" type="checkbox" name="answer" value="${track.genre}" id="answer-${index}">
-    <label class="game__check" for="answer-${index}">Отметить</label>
-  </div>
-</div>`
-).join(``);
-
-const template = `
-<section class="game game--genre">
-${header(state)}
-<section class="game__screen">
-  <h2 class="game__title">Выберите инди-рок треки</h2>
-  <form class="game__tracks">
-    ${tracks}
-    <button class="game__submit button" type="submit">Ответить</button>
-  </form>
-</section>
-</section>`;
-
-const view = getElementFromTemplate(template);
-const tracksForm = view.querySelector(`.game__tracks`);
-const answerBtn = view.querySelector(`.game__submit`);
-const replayBtn = view.querySelector(`.game__back`);
-
-answerBtn.disabled = true;
-answerBtn.addEventListener(`click`, () => {
-  if (state.level < 10) {
-    state.level++;
-    renderView(gameArtistView);
-  } else {
-    renderView(failTriesView);
+    return `
+    <section class="game game--genre">
+    ${header(state)}
+    <section class="game__screen">
+      <h2 class="game__title">Выберите инди-рок треки</h2>
+      <form class="game__tracks">
+        ${tracks}
+        <button class="game__submit button" type="submit">Ответить</button>
+      </form>
+    </section>
+    </section>`;
   }
-});
 
-replayBtn.addEventListener(`click`, () => renderView(welcomeView));
+  bind() {
+    const tracksAudio = [];
+    state.questions[0].answers.map((track) => {
+      tracksAudio.push(new Audio(track.src));
+    });
 
-tracksForm.addEventListener(`change`, (evt) => {
-  if (evt.target.classList.contains(`game__input`)) {
-    answerBtn.disabled = !formValidation();
+    const tracksForm = this._el.querySelector(`.game__tracks`);
+    const answerBtn = this._el.querySelector(`.game__submit`);
+    const replayBtn = this._el.querySelector(`.game__back`);
+
+    answerBtn.disabled = true;
+    answerBtn.addEventListener(`click`, () => this.onAnswer());
+
+    replayBtn.addEventListener(`click`, () => this.onReplay());
+
+    tracksForm.addEventListener(`change`, (evt) => {
+      if (evt.target.classList.contains(`game__input`)) {
+        answerBtn.disabled = !this.formValidation();
+      }
+    });
+
+    // tracksForm.addEventListener(`click`, (evt) => {
+    //   if (evt.target.classList.contains(`track__button`)) {
+    //     const controlBtn = evt.target;
+    //     const trackId = controlBtn.closest(`.track`).id;
+
+    //     if (controlBtn.classList.contains(`track__button--play`)) {
+    //       controlBtn.classList.remove(`track__button--play`);
+    //       controlBtn.classList.add(`track__button--pause`);
+    //       tracksAudio[trackId].play();
+    //     } else if (controlBtn.classList.contains(`track__button--pause`)) {
+    //       controlBtn.classList.remove(`track__button--pause`);
+    //       controlBtn.classList.add(`track__button--play`);
+    //       tracksAudio[trackId].pause();
+    //     }
+    //   }
+    // });
   }
-});
 
-// для перехода дальше хотя бы один чекбокс должен быть включен
-function formValidation() {
-  return view.querySelectorAll(`.game__input:checked`).length;
+  onReplay() { }
+
+  onAnswer() { }
+
+  formValidation() {
+    return this._el.querySelectorAll(`.game__input:checked`).length;
+  }
 }
 
-export default view;
+export default GameGenreView;
