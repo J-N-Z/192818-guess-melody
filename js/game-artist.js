@@ -1,63 +1,48 @@
-import {getElementFromTemplate} from './utils.js';
-import {renderView} from './utils.js';
-import resultSuccessView from './result-success.js';
-import gameGenreView from './game-genre.js';
-import welcomeView from './welcome.js';
-import failTriesView from './fail-tries.js';
-import failTimeView from './fail-time.js';
+import AbstractView from './abstract-view';
 import header from './header.js';
 import state from './data';
 
+class GameArtistView extends AbstractView {
+  get template() {
+    const artists = state.questions[5].answers.map((artist, index) => `
+    <div class="artist">
+      <input class="artist__input visually-hidden" type="radio" name="answer" value="${artist.name}" id="answer-${index}">
+      <label class="artist__name" for="answer-${index}">
+        <img class="artist__picture" src="http://placehold.it/134x134" alt="${artist.name}">
+        ${artist.name}
+      </label>
+    </div>`
+    ).join(``);
 
-const artists = state.questions[5].answers.map((artist, index) => `
-  <div class="artist">
-    <input class="artist__input visually-hidden" type="radio" name="answer" value="${artist.name}" id="answer-${index}">
-    <label class="artist__name" for="answer-${index}">
-      <img class="artist__picture" src="http://placehold.it/134x134" alt="${artist.name}">
-      ${artist.name}
-    </label>
-  </div>`
-).join(``);
-
-
-const template = `
-<section class="game game--artist">
-  ${header(state)}
-<section class="game__screen">
-  <h2 class="game__title">Кто исполняет эту песню?</h2>
-  <div class="game__track">
-    <button class="track__button track__button--play" type="button"></button>
-    <audio></audio>
-  </div>
-  <form class="game__artist">
-    ${artists}
-  </form>
-</section>
-</section>`;
-
-const view = getElementFromTemplate(template);
-const artistsForm = view.querySelector(`.game__artist`);
-const replayBtn = view.querySelector(`.game__back`);
-
-artistsForm.addEventListener(`change`, (evt) => {
-  if (evt.target.classList.contains(`artist__input`)) {
-    // renderView(getRandomEndView());
-    if (state.level < 10) {
-      state.level++;
-      renderView(gameGenreView);
-    } else {
-      renderView(getRandomEndView());
-    }
+    return `
+    <section class="game game--artist">
+      ${header(state)}
+    <section class="game__screen">
+      <h2 class="game__title">Кто исполняет эту песню?</h2>
+      <div class="game__track">
+        <button class="track__button track__button--play" type="button"></button>
+        <audio></audio>
+      </div>
+      <form class="game__artist">
+        ${artists}
+      </form>
+    </section>
+    </section>`;
   }
-});
 
-replayBtn.addEventListener(`click`, () => renderView(welcomeView));
+  bind() {
+    const artistsForm = this._el.querySelector(`.game__artist`);
+    const replayBtn = this._el.querySelector(`.game__back`);
 
-function getRandomEndView() {
-  const endScreens = [resultSuccessView, failTriesView, failTimeView];
-  const randomIndex = Math.floor(Math.random() * endScreens.length);
+    artistsForm.addEventListener(`change`, (evt) => this.onArtistChange(evt));
 
-  return endScreens[randomIndex];
+    replayBtn.addEventListener(`click`, () => this.onReplay());
+  }
+
+  onReplay() { }
+
+  onArtistChange() { }
 }
 
-export default view;
+
+export default GameArtistView;
