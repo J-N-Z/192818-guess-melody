@@ -1,12 +1,17 @@
 import AbstractView from './abstract-view';
-import header from './header.js';
-import state from './data';
+import HeaderView from './header.js';
 
-window.state = state;
 
 class GameGenreView extends AbstractView {
+  constructor(state) {
+    super();
+    this.state = state;
+  }
+
   get template() {
-    const tracks = state.questions[0].answers.map((track, index) => `
+    const header = new HeaderView(this.state).template;
+
+    const tracks = this.state.questions[0].answers.map((track, index) => `
     <div id="${index}"class="track">
       <button class="track__button track__button--play" type="button"></button>
       <div class="track__status">
@@ -21,7 +26,7 @@ class GameGenreView extends AbstractView {
 
     return `
     <section class="game game--genre">
-    ${header(state)}
+    ${header}
     <section class="game__screen">
       <h2 class="game__title">Выберите инди-рок треки</h2>
       <form class="game__tracks">
@@ -34,7 +39,7 @@ class GameGenreView extends AbstractView {
 
   bind() {
     const tracksAudio = [];
-    state.questions[0].answers.map((track) => {
+    this.state.questions[0].answers.map((track) => {
       tracksAudio.push(new Audio(track.src));
     });
 

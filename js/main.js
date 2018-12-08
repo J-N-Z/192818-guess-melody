@@ -1,4 +1,4 @@
-import {renderView} from './utils.js';
+import {renderView, updateView} from './utils.js';
 import WelcomeView from './welcome';
 import GameGenreView from './game-genre.js';
 import GameArtistView from './game-artist.js';
@@ -7,13 +7,53 @@ import FailTriesView from './fail-tries.js';
 import ResultSuccessView from './result-success.js';
 import ModalConfirmView from './modal-confirm.js';
 import ModalErrorView from './modal-error.js';
-import state from './data';
+import HeaderView from './header.js';
+import data from './data';
+import application from './application';
+
+const INITIAL_STATE = data;
+
+let state;
+
+const updateHeader = () => {
+  const gameEl = document.querySelector(`.game`);
+  gameEl.children[0].remove();
+  const header = new HeaderView(state).element;
+  gameEl.insertBefore(header, gameEl.children[0]);
+  //updateView(container, view);
+};
+
+export const startGame = () => {
+  state = Object.assign({}, INITIAL_STATE);
+
+  renderView(myGameGenreView.element);
+  startTimer();
+};
+
+const tick = () => {
+  state = Object.assign({}, state, {
+    time: state.time - 1000
+  });
+  updateHeader();
+};
+
+let timer;
+
+const startTimer = () => {
+  timer = setTimeout(() => {
+    tick();
+    startTimer();
+  }, 1000);
+};
+
+const stopTimer = clearTimeout(timer);
+
 
 
 const myWelcomeView = new WelcomeView();
-myWelcomeView.onStart = () => renderView(myGameGenreView.element);
 
-const myGameGenreView = new GameGenreView();
+
+const myGameGenreView = new GameGenreView(INITIAL_STATE);
 myGameGenreView.onReplay = () => replay();
 myGameGenreView.onAnswer = () => {
   if (state.level < 10) {
@@ -71,4 +111,6 @@ function replay() {
 }
 
 
-renderView(myWelcomeView.element);
+//renderView(myWelcomeView.element);
+
+application.showWelcome();
