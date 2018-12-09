@@ -5,6 +5,7 @@ export default {
 
   questions: [
     {
+      type: `genre`,
       title: `Выберите инди-рок треки`,
       answers: [
         {
@@ -38,6 +39,7 @@ export default {
       ]
     },
     {
+      type: `artist`,
       title: `Выберите инди-рок треки`,
       answers: [
         {
@@ -71,6 +73,7 @@ export default {
       ]
     },
     {
+      type: `genre`,
       title: `Выберите инди-рок треки`,
       answers: [
         {
@@ -104,6 +107,7 @@ export default {
       ]
     },
     {
+      type: `artist`,
       title: `Выберите инди-рок треки`,
       answers: [
         {
@@ -137,6 +141,7 @@ export default {
       ]
     },
     {
+      type: `genre`,
       title: `Выберите инди-рок треки`,
       answers: [
         {
@@ -173,6 +178,7 @@ export default {
     // another question type
 
     {
+      type: `artist`,
       title: `Кто исполняет эту песню?`,
       answers: [
         {
@@ -199,6 +205,7 @@ export default {
       ]
     },
     {
+      type: `genre`,
       title: `Кто исполняет эту песню?`,
       answers: [
         {
@@ -225,6 +232,7 @@ export default {
       ]
     },
     {
+      type: `artist`,
       title: `Кто исполняет эту песню?`,
       answers: [
         {
@@ -251,6 +259,7 @@ export default {
       ]
     },
     {
+      type: `genre`,
       title: `Кто исполняет эту песню?`,
       answers: [
         {
@@ -277,6 +286,7 @@ export default {
       ]
     },
     {
+      type: `artist`,
       title: `Кто исполняет эту песню?`,
       answers: [
         {

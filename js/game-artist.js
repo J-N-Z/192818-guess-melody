@@ -1,10 +1,14 @@
 import AbstractView from './abstract-view';
-import header from './header.js';
-import state from './data';
 
 class GameArtistView extends AbstractView {
+  constructor(state) {
+    super();
+    this.state = state;
+  }
+
   get template() {
-    const artists = state.questions[5].answers.map((artist, index) => `
+
+    const artists = this.state.questions[this.state.level].answers.map((artist, index) => `
     <div class="artist">
       <input class="artist__input visually-hidden" type="radio" name="answer" value="${artist.name}" id="answer-${index}">
       <label class="artist__name" for="answer-${index}">
@@ -15,8 +19,7 @@ class GameArtistView extends AbstractView {
     ).join(``);
 
     return `
-    <section class="game game--artist">
-      ${header(state)}
+
     <section class="game__screen">
       <h2 class="game__title">Кто исполняет эту песню?</h2>
       <div class="game__track">
@@ -27,19 +30,13 @@ class GameArtistView extends AbstractView {
         ${artists}
       </form>
     </section>
-    </section>`;
+`;
   }
 
   bind() {
     const artistsForm = this._el.querySelector(`.game__artist`);
-    const replayBtn = this._el.querySelector(`.game__back`);
-
     artistsForm.addEventListener(`change`, (evt) => this.onArtistChange(evt));
-
-    replayBtn.addEventListener(`click`, () => this.onReplay());
   }
-
-  onReplay() { }
 
   onArtistChange() { }
 }

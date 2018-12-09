@@ -5,6 +5,7 @@ export default class HeaderView extends AbstractView {
   constructor(state) {
     super();
     this.state = state;
+
   }
 
   get template() {
@@ -35,5 +36,10 @@ export default class HeaderView extends AbstractView {
       </header>`;
   }
 
-  bind() { }
+  bind() {
+    const replayBtn = this._el.querySelector(`.game__back`);
+    replayBtn.addEventListener(`click`, (evt) => this.onReplay(evt));
+  }
+
+  onReplay() { }
 }
