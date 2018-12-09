@@ -1,5 +1,5 @@
 import INITIAL_STATE from './data';
-
+import {decreaseLives} from './utils';
 
 export default class GameModel {
   constructor() {
@@ -20,6 +20,10 @@ export default class GameModel {
 
   isOutOfLives() {
     return this._state.lives <= 0;
+  }
+
+  decreaseLives() {
+    this._state.lives = decreaseLives(this._state.lives);
   }
 
   // tick() {
