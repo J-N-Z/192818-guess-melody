@@ -1,6 +1,7 @@
 import HeaderView from './header.js';
 import GameGenreView from './game-genre.js';
 import GameArtistView from './game-artist.js';
+import Application from './application.js';
 
 
 export default class GameScreen {
@@ -11,6 +12,8 @@ export default class GameScreen {
     this.header.onReplay = () => console.log(`to welcome screen`);
 
     this.root = document.createElement(`div`);
+    this._timer = null;
+    this.beginQuestionTime = 0;
   }
 
   // get element() {
@@ -21,16 +24,27 @@ export default class GameScreen {
     const gameEl = document.querySelector(`.game`);
     gameEl.children[0].remove();
     this.header = new HeaderView(this.model.state).element;
+    this.header.onReplay = () => console.log(`to welcome screen`);
     gameEl.insertBefore(this.header, gameEl.children[0]);
+  }
+
+  _tick() {
+    if (this.model.state.time > 0) {
+      this.model.tick();
+      this.updateHeader();
+      this._timer = setTimeout(() => this._tick(), 1000);
+    } else {
+      Application.showFailTime();
+    }
   }
 
   isAnswerCorrect(userAnswer) {
     const currentType = this.model.state.questions[this.model.state.level][`type`];
     const rightAnswers = this.model.state.questions[this.model.state.level][`answers`].filter((answer) => answer.isCorrect);
-    console.log('rightAnswers', rightAnswers);
+    console.log(`rightAnswers`, rightAnswers);
     if (userAnswer.length === rightAnswers.length) {
       if (userAnswer.every((answer) => rightAnswers.some((rightAnswer) => answer === rightAnswer[currentType]))) {
-        console.log('answer is correct!');
+        console.log(`answer is correct!`);
         return true;
       }
     }
@@ -56,6 +70,9 @@ export default class GameScreen {
 
           if (this.isAnswerCorrect(answer)) {
             // записать в userAnswers время ответа
+            const answerTime = this.beginQuestionTime - this.model.state.time;
+            console.log('answerTime', answerTime);
+            this.model.state.userAnswers.push(answerTime);
 
             // переключаемся на следующий вопрос, если они остались
             if (this.model.state.level < this.model.state.questions.length - 1) {
@@ -64,24 +81,20 @@ export default class GameScreen {
             } else {
               console.log(`рендер экрана result-success`);
               // рендер экрана result-success
+              Application.showStats();
             }
           } else {
+            // если ответ неправильный уменьшаем жизни или рендерим экран поражения
             if (this.model.state.lives > 0) {
               this.model.decreaseLives();
-              //console.log(this.model.state);
               this.updateHeader();
-              // обновить header (хотя он и так каждую секунду обновляется) чтобы игрок сразу увидел уменьшение жизней
             } else {
-              console.log(`рендер экрана fail-tries`);
-              // рендер экрана fail-tries
+              Application.showFailTries();
             }
-
           }
-
-
         };
-        element.appendChild(myGameGenreView.element);
 
+        element.appendChild(myGameGenreView.element);
         break;
 
       case `artist`:
@@ -93,12 +106,30 @@ export default class GameScreen {
         myGameArtistView.onArtistChange = (evt, answer) => {
           if (evt.target.classList.contains(`artist__input`)) {
             console.log('answer', answer);
-            this.isAnswerCorrect(answer);
-            if (this.model.state.level < this.model.state.questions.length - 1) {
-              this.model.nextLevel();
-              this.getElementByType(this.model.state.questions[this.model.state.level][`type`]);
+
+            if (this.isAnswerCorrect(answer)) {
+              // записать в userAnswers время ответа
+              const answerTime = this.beginQuestionTime - this.model.state.time;
+              console.log('answerTime', answerTime);
+              this.model.state.userAnswers.push(answerTime);
+
+              // переключаемся на следующий вопрос, если они остались
+              if (this.model.state.level < this.model.state.questions.length - 1) {
+                this.model.nextLevel();
+                this.getElementByType(this.model.state.questions[this.model.state.level][`type`]);
+              } else {
+                console.log(`рендер экрана result-success`);
+                // рендер экрана result-success
+                Application.showStats();
+              }
             } else {
-              //renderView(getRandomEndView());
+              // если ответ неправильный уменьшаем жизни или рендерим экран поражения
+              if (this.model.state.lives > 0) {
+                this.model.decreaseLives();
+                this.updateHeader();
+              } else {
+                Application.showFailTries();
+              }
             }
           }
         };
@@ -107,9 +138,19 @@ export default class GameScreen {
         break;
     }
 
-    this.changeContentView(element);
+    // фиксация начала отсчета времени на вопрос
+    this.beginQuestionTime = this.model.state.time;
 
+    this.changeContentView(element);
     return this.root;
+  }
+
+  startGame() {
+    this._tick();
+  }
+
+  stopGame() {
+    clearTimeout(this._timer);
   }
 
   changeContentView(element) {

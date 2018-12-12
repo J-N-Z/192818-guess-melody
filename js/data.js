@@ -1,6 +1,6 @@
 export default {
   lives: 3,
-  time: 345000,
+  time: 300000,
   level: 0,
 
   userAnswers: [],
@@ -120,9 +120,6 @@ export default {
         },
       ]
     },
-
-
-
   ]
 
 };

@@ -26,7 +26,7 @@ export default class GameModel {
     this._state.lives = decreaseLives(this._state.lives);
   }
 
-  // tick() {
-  //   this._state = tick(this._state);
-  // }
+  tick() {
+    this._state = Object.assign({}, this._state, {time: this._state.time - 1000});
+  }
 }
