@@ -1,12 +1,15 @@
 import AbstractView from './abstract-view';
-import header from './header.js';
-import state from './data';
 
-window.state = state;
 
 class GameGenreView extends AbstractView {
+  constructor(state) {
+    super();
+    this.state = state;
+  }
+
   get template() {
-    const tracks = state.questions[0].answers.map((track, index) => `
+
+    const tracks = this.state.questions[this.state.level].answers.map((track, index) => `
     <div id="${index}"class="track">
       <button class="track__button track__button--play" type="button"></button>
       <div class="track__status">
@@ -20,8 +23,7 @@ class GameGenreView extends AbstractView {
     ).join(``);
 
     return `
-    <section class="game game--genre">
-    ${header(state)}
+
     <section class="game__screen">
       <h2 class="game__title">Выберите инди-рок треки</h2>
       <form class="game__tracks">
@@ -29,23 +31,24 @@ class GameGenreView extends AbstractView {
         <button class="game__submit button" type="submit">Ответить</button>
       </form>
     </section>
-    </section>`;
+  `;
   }
 
   bind() {
     const tracksAudio = [];
-    state.questions[0].answers.map((track) => {
+    this.state.questions[0].answers.map((track) => {
       tracksAudio.push(new Audio(track.src));
     });
 
     const tracksForm = this._el.querySelector(`.game__tracks`);
     const answerBtn = this._el.querySelector(`.game__submit`);
-    const replayBtn = this._el.querySelector(`.game__back`);
 
     answerBtn.disabled = true;
-    answerBtn.addEventListener(`click`, () => this.onAnswer());
-
-    replayBtn.addEventListener(`click`, () => this.onReplay());
+    answerBtn.addEventListener(`click`, (evt) => {
+      const checkedInputs = Array.from(this._el.querySelectorAll(`.game__input:checked`))
+      const answers = checkedInputs.map((input) => input.value);
+      this.onAnswer(evt, answers);
+    });
 
     tracksForm.addEventListener(`change`, (evt) => {
       if (evt.target.classList.contains(`game__input`)) {
@@ -70,8 +73,6 @@ class GameGenreView extends AbstractView {
     //   }
     // });
   }
-
-  onReplay() { }
 
   onAnswer() { }
 

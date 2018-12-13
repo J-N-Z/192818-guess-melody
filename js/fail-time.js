@@ -1,7 +1,7 @@
 import AbstractView from './abstract-view';
 
 class FailTimeView extends AbstractView {
-  get element() {
+  get template() {
     return `
     <section class="result">
     <div class="result__logo"><img src="img/melody-logo.png" alt="Угадай мелодию" width="186" height="83"></div>
