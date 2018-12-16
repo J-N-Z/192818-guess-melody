@@ -74,13 +74,6 @@ export function calculateTotalScore(answersArr, lives) {
 // }
 
 export function getResults(statistics, currentResult) {
-  // if (currentResult.time === 0) {
-  //   return `Время вышло! Вы не успели отгадать все мелодии`;
-  // }
-  // if (currentResult.lives === 0) {
-  //   return `У вас закончились все попытки. Ничего, повезёт в следующий раз!`;
-  // }
-
   const stats = [...statistics];
   stats.push(currentResult.score);
 
