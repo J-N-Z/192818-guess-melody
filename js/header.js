@@ -1,5 +1,6 @@
 import AbstractView from './abstract-view';
 import {addLeadZero} from './utils';
+import {LIVES} from './constants.js';
 
 export default class HeaderView extends AbstractView {
   constructor(state) {
@@ -30,7 +31,7 @@ export default class HeaderView extends AbstractView {
         </div>
 
         <div class="game__mistakes">
-          ${new Array(this.state.lives).fill(`<div class="wrong"></div>`).join(``)}
+          ${new Array(LIVES - this.state.lives).fill(`<div class="wrong"></div>`).join(``)}
         </div>
       </header>`;
   }

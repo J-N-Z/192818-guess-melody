@@ -2,12 +2,12 @@ import HeaderView from './header.js';
 import GameGenreView from './game-genre.js';
 import GameArtistView from './game-artist.js';
 import Application from './application.js';
+import {TIME_TO_WARNING} from './constants.js';
 
 
 export default class GameScreen {
   constructor(model) {
     this.model = model;
-
     this.header = new HeaderView(this.model.state).element;
     this.header.onReplay = () => console.log(`to welcome screen`);
 
@@ -21,6 +21,14 @@ export default class GameScreen {
     if (gameEl) {
       gameEl.children[0].remove();
       this.header = new HeaderView(this.model.state).element;
+
+      if (this.model.state.time < TIME_TO_WARNING) {
+        const timerEl = this.header.querySelector(`.timer__value`);
+        if (!timerEl.classList.contains(`timer__value--finished`)) {
+          timerEl.classList.add(`timer__value--finished`);
+        }
+      }
+
       this.header.onReplay = () => console.log(`to welcome screen`);
       gameEl.insertBefore(this.header, gameEl.children[0]);
     }
@@ -42,14 +50,15 @@ export default class GameScreen {
       this.model.decreaseLives();
       this.updateHeader();
     } else {
+      this.stopGame();
       Application.showFailTries();
     }
   }
 
   isAnswerCorrect(userAnswer) {
-    const currentType = this.model.state.questions[this.model.state.level][`type`];
+    const currentType = this.model.data[this.model.state.level][`type`];
     if (currentType === `genre`) {
-      const currentQuestion = this.model.state.questions[this.model.state.level];
+      const currentQuestion = this.model.data[this.model.state.level];
       const currentQuestionAnswers = currentQuestion[`answers`];
       const rightAnswers = currentQuestionAnswers.filter((answer) => answer.genre === currentQuestion.genre);
 
@@ -60,7 +69,7 @@ export default class GameScreen {
         }
       }
     } else if (currentType === `artist`) {
-      const currentQuestion = this.model.state.questions[this.model.state.level];
+      const currentQuestion = this.model.data[this.model.state.level];
       const currentQuestionAnswers = currentQuestion[`answers`];
       const rightAnswer = currentQuestionAnswers.filter((answer) => answer.isCorrect)[0];
 
@@ -84,7 +93,7 @@ export default class GameScreen {
         element.className = `game game-${type}`;
         element.appendChild(this.header);
 
-        const myGameGenreView = new GameGenreView(this.model.state);
+        const myGameGenreView = new GameGenreView(this.model.state, this.model);
         myGameGenreView.onAnswer = (evt, answer) => {
           evt.preventDefault();
           console.log('answer', answer);
@@ -95,9 +104,9 @@ export default class GameScreen {
             this.model.state.userAnswers.push(answerTime);
 
             // переключаемся на следующий вопрос, если они остались
-            if (this.model.state.level < this.model.state.questions.length - 1) {
+            if (this.model.state.level < this.model.data.length - 1) {
               this.model.nextLevel();
-              this.getElementByType(this.model.state.questions[this.model.state.level][`type`]);
+              this.getElementByType(this.model.data[this.model.state.level][`type`]);
             } else {
               Application.showStats(this.model.state);
             }
@@ -114,7 +123,7 @@ export default class GameScreen {
         element.className = `game game-${type}`;
         element.appendChild(this.header);
 
-        const myGameArtistView = new GameArtistView(this.model.state);
+        const myGameArtistView = new GameArtistView(this.model.state, this.model);
         myGameArtistView.onArtistChange = (evt, answer) => {
           if (evt.target.classList.contains(`artist__input`)) {
             console.log('answer', answer);
@@ -124,9 +133,9 @@ export default class GameScreen {
               this.model.state.userAnswers.push(answerTime);
 
               // переключаемся на следующий вопрос, если они остались
-              if (this.model.state.level < this.model.state.questions.length - 1) {
+              if (this.model.state.level < this.model.data.length - 1) {
                 this.model.nextLevel();
-                this.getElementByType(this.model.state.questions[this.model.state.level][`type`]);
+                this.getElementByType(this.model.data[this.model.state.level][`type`]);
               } else {
                 Application.showStats(this.model.state);
               }

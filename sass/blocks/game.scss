@@ -144,3 +144,38 @@
   display: flex;
   justify-content: space-between;
 }
+
+
+.game__loading {
+  display: flex;
+  position: fixed;
+  background: rgba(0,0,0,.8);
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+}
+
+.game__loading-spinner {
+  width: 80px;
+  height: 80px;
+  transform: translate;
+  margin: auto;
+  border-top: 5px solid $color-orange;
+  border-radius: 50%;
+  border-right: 5px solid $color-orange;
+  animation-name: loading;
+  animation-duration: .8s;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+}
+
+@keyframes loading {
+  0% {
+    transform: rotate(0deg)
+  }
+
+  100% {
+    transform: rotate(360deg)
+  }
+}

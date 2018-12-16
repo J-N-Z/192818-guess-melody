@@ -1,13 +1,14 @@
 import AbstractView from './abstract-view';
 
 class GameGenreView extends AbstractView {
-  constructor(state) {
+  constructor(state, model) {
     super();
     this.state = state;
+    this.model = model;
   }
 
   get template() {
-    const currentQuestion = this.state.questions[this.state.level];
+    const currentQuestion = this.model.data[this.state.level];
 
     const tracks = currentQuestion.answers.map((track, index) => `
     <div id="${index}"class="track">
@@ -36,7 +37,7 @@ class GameGenreView extends AbstractView {
 
   bind() {
     const tracksAudio = [];
-    this.state.questions[0].answers.map((track) => {
+    this.model.data[0].answers.map((track) => {
       tracksAudio.push(new Audio(track.src));
     });
 

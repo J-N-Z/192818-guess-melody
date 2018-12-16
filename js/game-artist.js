@@ -1,13 +1,14 @@
 import AbstractView from './abstract-view';
 
 class GameArtistView extends AbstractView {
-  constructor(state) {
+  constructor(state, model) {
     super();
     this.state = state;
+    this.model = model;
   }
 
   get template() {
-    const currentQuestion = this.state.questions[this.state.level];
+    const currentQuestion = this.model.data[this.state.level];
 
     const artists = currentQuestion.answers.map((artist, index) => `
     <div class="artist">

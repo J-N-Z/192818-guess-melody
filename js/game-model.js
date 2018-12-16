@@ -2,7 +2,8 @@ import INITIAL_STATE from './data';
 import {decreaseLives} from './utils';
 
 export default class GameModel {
-  constructor() {
+  constructor(data) {
+    this.data = data;
     this.restart();
   }
 
@@ -11,8 +12,7 @@ export default class GameModel {
   }
 
   restart() {
-    this._state = INITIAL_STATE;
-    this._state.userAnswers.length = 0;
+    this._state = Object.assign({}, INITIAL_STATE);
   }
 
   nextLevel() {
