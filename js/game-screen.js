@@ -85,7 +85,7 @@ export default class GameScreen {
   getElementByType(type) {
     let element = null;
 
-    console.log('this.model.state', this.model.state);
+    console.log(`this.model.state`, this.model.state);
 
     switch (type) {
       case `genre`:
@@ -96,7 +96,7 @@ export default class GameScreen {
         const myGameGenreView = new GameGenreView(this.model.state, this.model);
         myGameGenreView.onAnswer = (evt, answer) => {
           evt.preventDefault();
-          console.log('answer', answer);
+          console.log(`answer`, answer);
 
           if (this.isAnswerCorrect(answer)) {
             // записать в userAnswers время ответа
@@ -126,7 +126,7 @@ export default class GameScreen {
         const myGameArtistView = new GameArtistView(this.model.state, this.model);
         myGameArtistView.onArtistChange = (evt, answer) => {
           if (evt.target.classList.contains(`artist__input`)) {
-            console.log('answer', answer);
+            console.log(`answer`, answer);
 
             if (this.isAnswerCorrect(answer)) {
               const answerTime = this.beginQuestionTime - this.model.state.time;

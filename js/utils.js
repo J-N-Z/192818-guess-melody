@@ -1,20 +1,6 @@
-import HeaderView from './header.js';
 import {FAST_ANSWER_MAX_TIME} from './constants.js';
 import {LIVES} from './constants.js';
 
-export const updateHeader = () => {
-  const gameEl = document.querySelector(`.game`);
-  gameEl.children[0].remove();
-  const header = new HeaderView(state).element;
-  gameEl.insertBefore(header, gameEl.children[0]);
-};
-
-export const tick = (state) => {
-  state = Object.assign({}, state, {
-    time: state.time - 1000
-  });
-  updateHeader();
-};
 
 export function renderView(view) {
   const sectionMain = document.querySelector(`.main`);
@@ -49,7 +35,6 @@ export function updateView(container, view) {
 // }
 
 export function calculateTotalScore(answersArr, lives) {
-  console.log('answersArr',answersArr,'lives',lives);
   let totalScore = 0;
 
   const mistakes = LIVES - lives;

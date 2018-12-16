@@ -7,7 +7,7 @@ import FailTimeView from './fail-time.js';
 import FailTriesView from './fail-tries.js';
 import ResultSuccessView from './result-success.js';
 import LoadingView from './loading-view.js';
-import ModalConfirmView from './modal-confirm.js';
+// import ModalConfirmView from './modal-confirm.js';
 import ModalErrorView from './modal-error.js';
 
 const checkStatus = (response) => {

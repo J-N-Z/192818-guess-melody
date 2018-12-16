@@ -10,7 +10,6 @@ class ResultSuccessView extends AbstractView {
   }
 
   get template() {
-    //debugger;
     const timeSpentInSeconds = (TIME - this.state.time) / 1000;
     const minutesSpent = (() => {
       if (timeSpentInSeconds >= 60) {
@@ -21,7 +20,7 @@ class ResultSuccessView extends AbstractView {
     })();
     const secondsSpent = timeSpentInSeconds - minutesSpent * 60;
     const results = calculateTotalScore(this.state.userAnswers, this.state.lives);
-    console.log('results',results);
+    // console.log('results',results);
     const statistics = getResults(MOCK_GAME_STATISTICS, {score: results.totalScore});
 
     return `
