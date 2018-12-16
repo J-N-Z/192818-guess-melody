@@ -12,6 +12,7 @@ export default class GameModel {
 
   restart() {
     this._state = INITIAL_STATE;
+    this._state.userAnswers.length = 0;
   }
 
   nextLevel() {

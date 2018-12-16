@@ -1,6 +1,5 @@
 import AbstractView from './abstract-view';
 
-
 class GameGenreView extends AbstractView {
   constructor(state) {
     super();
@@ -8,8 +7,9 @@ class GameGenreView extends AbstractView {
   }
 
   get template() {
+    const currentQuestion = this.state.questions[this.state.level];
 
-    const tracks = this.state.questions[this.state.level].answers.map((track, index) => `
+    const tracks = currentQuestion.answers.map((track, index) => `
     <div id="${index}"class="track">
       <button class="track__button track__button--play" type="button"></button>
       <div class="track__status">
@@ -25,7 +25,7 @@ class GameGenreView extends AbstractView {
     return `
 
     <section class="game__screen">
-      <h2 class="game__title">Выберите инди-рок треки</h2>
+      <h2 class="game__title">${currentQuestion.question}</h2>
       <form class="game__tracks">
         ${tracks}
         <button class="game__submit button" type="submit">Ответить</button>
@@ -45,7 +45,7 @@ class GameGenreView extends AbstractView {
 
     answerBtn.disabled = true;
     answerBtn.addEventListener(`click`, (evt) => {
-      const checkedInputs = Array.from(this._el.querySelectorAll(`.game__input:checked`))
+      const checkedInputs = Array.from(this._el.querySelectorAll(`.game__input:checked`));
       const answers = checkedInputs.map((input) => input.value);
       this.onAnswer(evt, answers);
     });

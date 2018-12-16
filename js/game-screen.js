@@ -16,16 +16,14 @@ export default class GameScreen {
     this.beginQuestionTime = 0;
   }
 
-  // get element() {
-  //   return this.root;
-  // }
-
   updateHeader() {
     const gameEl = document.querySelector(`.game`);
-    gameEl.children[0].remove();
-    this.header = new HeaderView(this.model.state).element;
-    this.header.onReplay = () => console.log(`to welcome screen`);
-    gameEl.insertBefore(this.header, gameEl.children[0]);
+    if (gameEl) {
+      gameEl.children[0].remove();
+      this.header = new HeaderView(this.model.state).element;
+      this.header.onReplay = () => console.log(`to welcome screen`);
+      gameEl.insertBefore(this.header, gameEl.children[0]);
+    }
   }
 
   _tick() {
@@ -38,12 +36,35 @@ export default class GameScreen {
     }
   }
 
+  wrongAnswer() {
+    // если ответ неправильный уменьшаем жизни или рендерим экран поражения
+    if (this.model.state.lives > 0) {
+      this.model.decreaseLives();
+      this.updateHeader();
+    } else {
+      Application.showFailTries();
+    }
+  }
+
   isAnswerCorrect(userAnswer) {
     const currentType = this.model.state.questions[this.model.state.level][`type`];
-    const rightAnswers = this.model.state.questions[this.model.state.level][`answers`].filter((answer) => answer.isCorrect);
-    console.log(`rightAnswers`, rightAnswers);
-    if (userAnswer.length === rightAnswers.length) {
-      if (userAnswer.every((answer) => rightAnswers.some((rightAnswer) => answer === rightAnswer[currentType]))) {
+    if (currentType === `genre`) {
+      const currentQuestion = this.model.state.questions[this.model.state.level];
+      const currentQuestionAnswers = currentQuestion[`answers`];
+      const rightAnswers = currentQuestionAnswers.filter((answer) => answer.genre === currentQuestion.genre);
+
+      if (userAnswer.length === rightAnswers.length) {
+        if (userAnswer.every((answer) => rightAnswers.some((rightAnswer) => answer === rightAnswer[currentType]))) {
+          console.log(`answer is correct!`);
+          return true;
+        }
+      }
+    } else if (currentType === `artist`) {
+      const currentQuestion = this.model.state.questions[this.model.state.level];
+      const currentQuestionAnswers = currentQuestion[`answers`];
+      const rightAnswer = currentQuestionAnswers.filter((answer) => answer.isCorrect)[0];
+
+      if (userAnswer === rightAnswer.title) {
         console.log(`answer is correct!`);
         return true;
       }
@@ -71,7 +92,6 @@ export default class GameScreen {
           if (this.isAnswerCorrect(answer)) {
             // записать в userAnswers время ответа
             const answerTime = this.beginQuestionTime - this.model.state.time;
-            console.log('answerTime', answerTime);
             this.model.state.userAnswers.push(answerTime);
 
             // переключаемся на следующий вопрос, если они остались
@@ -79,18 +99,10 @@ export default class GameScreen {
               this.model.nextLevel();
               this.getElementByType(this.model.state.questions[this.model.state.level][`type`]);
             } else {
-              console.log(`рендер экрана result-success`);
-              // рендер экрана result-success
-              Application.showStats();
+              Application.showStats(this.model.state);
             }
           } else {
-            // если ответ неправильный уменьшаем жизни или рендерим экран поражения
-            if (this.model.state.lives > 0) {
-              this.model.decreaseLives();
-              this.updateHeader();
-            } else {
-              Application.showFailTries();
-            }
+            this.wrongAnswer();
           }
         };
 
@@ -108,9 +120,7 @@ export default class GameScreen {
             console.log('answer', answer);
 
             if (this.isAnswerCorrect(answer)) {
-              // записать в userAnswers время ответа
               const answerTime = this.beginQuestionTime - this.model.state.time;
-              console.log('answerTime', answerTime);
               this.model.state.userAnswers.push(answerTime);
 
               // переключаемся на следующий вопрос, если они остались
@@ -118,18 +128,10 @@ export default class GameScreen {
                 this.model.nextLevel();
                 this.getElementByType(this.model.state.questions[this.model.state.level][`type`]);
               } else {
-                console.log(`рендер экрана result-success`);
-                // рендер экрана result-success
-                Application.showStats();
+                Application.showStats(this.model.state);
               }
             } else {
-              // если ответ неправильный уменьшаем жизни или рендерим экран поражения
-              if (this.model.state.lives > 0) {
-                this.model.decreaseLives();
-                this.updateHeader();
-              } else {
-                Application.showFailTries();
-              }
+              this.wrongAnswer();
             }
           }
         };

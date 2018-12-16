@@ -1,7 +1,6 @@
 import HeaderView from './header.js';
-
-const QUESTIONS_AMOUNT = 10;
-const LIVES = 3;
+import {FAST_ANSWER_MAX_TIME} from './constants.js';
+import {LIVES} from './constants.js';
 
 export const updateHeader = () => {
   const gameEl = document.querySelector(`.game`);
@@ -29,31 +28,73 @@ export function updateView(container, view) {
   container.appendChild(view);
 }
 
+// old version
+
+// export function calculateTotalScore(answersArr, lives) {
+//   let totalScore = -1;
+
+//   if (answersArr.length === QUESTIONS_AMOUNT) {
+//     const rightAnswers = answersArr.filter((answer) => answer.right);
+//     const mistakes = LIVES - lives;
+//     const fastAnswers = answersArr.filter((answer) => answer.time < 30);
+
+//     totalScore = rightAnswers.length - mistakes * 2;
+//     if (fastAnswers.length > 0) {
+//       totalScore += fastAnswers.length;
+//     }
+//     return totalScore;
+//   }
+
+//   return totalScore;
+// }
+
 export function calculateTotalScore(answersArr, lives) {
-  let totalScore = -1;
+  console.log('answersArr',answersArr,'lives',lives);
+  let totalScore = 0;
 
-  if (answersArr.length === QUESTIONS_AMOUNT) {
-    const rightAnswers = answersArr.filter((answer) => answer.right);
-    const mistakes = LIVES - lives;
-    const fastAnswers = answersArr.filter((answer) => answer.time < 30);
+  const mistakes = LIVES - lives;
+  const fastAnswers = answersArr.filter((answer) => answer < FAST_ANSWER_MAX_TIME).length;
 
-    totalScore = rightAnswers.length - mistakes * 2;
-    if (fastAnswers.length > 0) {
-      totalScore += fastAnswers.length;
-    }
-    return totalScore;
+  totalScore = answersArr.length - mistakes * 2;
+
+  if (fastAnswers > 0) {
+    totalScore += fastAnswers;
   }
 
-  return totalScore;
+  return {
+    totalScore,
+    fastAnswers,
+    mistakes
+  };
 }
 
+// old
+
+// export function getResults(statistics, currentResult) {
+//   if (currentResult.time === 0) {
+//     return `Время вышло! Вы не успели отгадать все мелодии`;
+//   }
+//   if (currentResult.lives === 0) {
+//     return `У вас закончились все попытки. Ничего, повезёт в следующий раз!`;
+//   }
+
+//   const stats = [...statistics];
+//   stats.push(currentResult.score);
+
+//   const sortedStats = stats.sort((a, b) => b - a);
+//   const rank = sortedStats.indexOf(currentResult.score) + 1;
+//   const beatenPercents = (sortedStats.length - rank) / (sortedStats.length - 1) * 100;
+
+//   return `Вы заняли ${rank} место из ${sortedStats.length} игроков. Это лучше, чем у ${beatenPercents}% игроков`;
+// }
+
 export function getResults(statistics, currentResult) {
-  if (currentResult.time === 0) {
-    return `Время вышло! Вы не успели отгадать все мелодии`;
-  }
-  if (currentResult.lives === 0) {
-    return `У вас закончились все попытки. Ничего, повезёт в следующий раз!`;
-  }
+  // if (currentResult.time === 0) {
+  //   return `Время вышло! Вы не успели отгадать все мелодии`;
+  // }
+  // if (currentResult.lives === 0) {
+  //   return `У вас закончились все попытки. Ничего, повезёт в следующий раз!`;
+  // }
 
   const stats = [...statistics];
   stats.push(currentResult.score);

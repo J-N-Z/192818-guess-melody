@@ -7,20 +7,21 @@ class GameArtistView extends AbstractView {
   }
 
   get template() {
+    const currentQuestion = this.state.questions[this.state.level];
 
-    const artists = this.state.questions[this.state.level].answers.map((artist, index) => `
+    const artists = currentQuestion.answers.map((artist, index) => `
     <div class="artist">
-      <input class="artist__input visually-hidden" type="radio" name="answer" value="${artist.artist}" id="answer-${index}">
+      <input class="artist__input visually-hidden" type="radio" name="answer" value="${artist.title}" id="answer-${index}">
       <label class="artist__name" for="answer-${index}">
-        <img class="artist__picture" src="http://placehold.it/134x134" alt="${artist.artist}">
-        ${artist.artist}
+        <img class="artist__picture" src="http://placehold.it/134x134" alt="${artist.title}">
+        ${artist.title}
       </label>
     </div>`
     ).join(``);
 
     return `
     <section class="game__screen">
-      <h2 class="game__title">Кто исполняет эту песню?</h2>
+      <h2 class="game__title">${currentQuestion.question}</h2>
       <div class="game__track">
         <button class="track__button track__button--play" type="button"></button>
         <audio></audio>
@@ -35,7 +36,7 @@ class GameArtistView extends AbstractView {
   bind() {
     const artistsForm = this._el.querySelector(`.game__artist`);
     artistsForm.addEventListener(`change`, (evt) => {
-      const answer = [evt.target.value];
+      const answer = evt.target.value;
       this.onArtistChange(evt, answer);
     });
   }

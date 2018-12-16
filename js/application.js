@@ -34,10 +34,9 @@ export default class Application {
     renderView(failTime.element);
   }
 
-  static showStats() {
-    const stats = new ResultSuccessView();
+  static showStats(state) {
+    const stats = new ResultSuccessView(state);
     stats.onReplay = () => Application.showWelcome();
     renderView(stats.element);
   }
-
 }

@@ -5,7 +5,6 @@ export default class HeaderView extends AbstractView {
   constructor(state) {
     super();
     this.state = state;
-
   }
 
   get template() {
