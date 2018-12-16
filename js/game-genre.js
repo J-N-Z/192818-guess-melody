@@ -57,22 +57,22 @@ class GameGenreView extends AbstractView {
       }
     });
 
-    // tracksForm.addEventListener(`click`, (evt) => {
-    //   if (evt.target.classList.contains(`track__button`)) {
-    //     const controlBtn = evt.target;
-    //     const trackId = controlBtn.closest(`.track`).id;
+    tracksForm.addEventListener(`click`, (evt) => {
+      if (evt.target.classList.contains(`track__button`)) {
+        const controlBtn = evt.target;
+        const trackId = controlBtn.closest(`.track`).id;
 
-    //     if (controlBtn.classList.contains(`track__button--play`)) {
-    //       controlBtn.classList.remove(`track__button--play`);
-    //       controlBtn.classList.add(`track__button--pause`);
-    //       tracksAudio[trackId].play();
-    //     } else if (controlBtn.classList.contains(`track__button--pause`)) {
-    //       controlBtn.classList.remove(`track__button--pause`);
-    //       controlBtn.classList.add(`track__button--play`);
-    //       tracksAudio[trackId].pause();
-    //     }
-    //   }
-    // });
+        if (controlBtn.classList.contains(`track__button--play`)) {
+          controlBtn.classList.remove(`track__button--play`);
+          controlBtn.classList.add(`track__button--pause`);
+          tracksAudio[trackId].play();
+        } else if (controlBtn.classList.contains(`track__button--pause`)) {
+          controlBtn.classList.remove(`track__button--pause`);
+          controlBtn.classList.add(`track__button--play`);
+          tracksAudio[trackId].pause();
+        }
+      }
+    });
   }
 
   onAnswer() { }

@@ -7,10 +7,13 @@ class GameArtistView extends AbstractView {
     this.model = model;
   }
 
-  get template() {
-    const currentQuestion = this.model.data[this.state.level];
+  get currentQuestion() {
+    return this.model.data[this.state.level];
+  }
 
-    const artists = currentQuestion.answers.map((artist, index) => `
+  get template() {
+
+    const artists = this.currentQuestion.answers.map((artist, index) => `
     <div class="artist">
       <input class="artist__input visually-hidden" type="radio" name="answer" value="${artist.title}" id="answer-${index}">
       <label class="artist__name" for="answer-${index}">
@@ -22,7 +25,7 @@ class GameArtistView extends AbstractView {
 
     return `
     <section class="game__screen">
-      <h2 class="game__title">${currentQuestion.question}</h2>
+      <h2 class="game__title">${this.currentQuestion.question}</h2>
       <div class="game__track">
         <button class="track__button track__button--play" type="button"></button>
         <audio></audio>
@@ -39,6 +42,21 @@ class GameArtistView extends AbstractView {
     artistsForm.addEventListener(`change`, (evt) => {
       const answer = evt.target.value;
       this.onArtistChange(evt, answer);
+    });
+
+    const audio = new Audio(this.currentQuestion.src);
+
+    const controlBtn = this._el.querySelector(`.track__button`);
+    controlBtn.addEventListener(`click`, () => {
+      if (controlBtn.classList.contains(`track__button--play`)) {
+        controlBtn.classList.remove(`track__button--play`);
+        controlBtn.classList.add(`track__button--pause`);
+        audio.play();
+      } else if (controlBtn.classList.contains(`track__button--pause`)) {
+        controlBtn.classList.remove(`track__button--pause`);
+        controlBtn.classList.add(`track__button--play`);
+        audio.pause();
+      }
     });
   }
 
