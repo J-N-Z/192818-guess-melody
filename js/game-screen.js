@@ -8,8 +8,10 @@ import {TIME_TO_WARNING} from './constants.js';
 export default class GameScreen {
   constructor(model) {
     this.model = model;
-    this.header = new HeaderView(this.model.state).element;
-    this.header.onReplay = () => {}; // console.log(`to welcome screen`);
+
+    this.headerView = new HeaderView(this.model.state);
+    this.headerView.onReplay = () => Application.showWelcome();
+    this.header = this.headerView.element;
 
     this.root = document.createElement(`div`);
     this._timer = null;
@@ -20,7 +22,10 @@ export default class GameScreen {
     const gameEl = document.querySelector(`.game`);
     if (gameEl) {
       gameEl.children[0].remove();
-      this.header = new HeaderView(this.model.state).element;
+
+      this.headerView = new HeaderView(this.model.state);
+      this.headerView.onReplay = () => Application.showWelcome();
+      this.header = this.headerView.element;
 
       if (this.model.state.time < TIME_TO_WARNING) {
         const timerEl = this.header.querySelector(`.timer__value`);
@@ -29,7 +34,6 @@ export default class GameScreen {
         }
       }
 
-      this.header.onReplay = () => {}; // console.log(`to welcome screen`);
       gameEl.insertBefore(this.header, gameEl.children[0]);
     }
   }
@@ -131,6 +135,8 @@ export default class GameScreen {
             if (this.isAnswerCorrect(answer)) {
               const answerTime = this.beginQuestionTime - this.model.state.time;
               this.model.state.userAnswers.push(answerTime);
+
+              myGameArtistView.destroy();
 
               // переключаемся на следующий вопрос, если они остались
               if (this.model.state.level < this.model.data.length - 1) {

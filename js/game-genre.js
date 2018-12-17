@@ -37,7 +37,7 @@ class GameGenreView extends AbstractView {
 
   bind() {
     const tracksAudio = [];
-    this.model.data[0].answers.map((track) => {
+    this.model.data[this.state.level].answers.map((track) => {
       tracksAudio.push(new Audio(track.src));
     });
 
@@ -73,6 +73,8 @@ class GameGenreView extends AbstractView {
         }
       }
     });
+
+    tracksForm.querySelector(`.track__button`).click();
   }
 
   onAnswer() { }
