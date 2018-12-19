@@ -107,6 +107,8 @@ export default class GameScreen {
             const answerTime = this.beginQuestionTime - this.model.state.time;
             this.model.state.userAnswers.push(answerTime);
 
+            myGameGenreView.destroy();
+
             // переключаемся на следующий вопрос, если они остались
             if (this.model.state.level < this.model.data.length - 1) {
               this.model.nextLevel();

@@ -8,7 +8,7 @@ export default {
 
   userAnswers: [],
 
-
+  debug: true
 };
 
 

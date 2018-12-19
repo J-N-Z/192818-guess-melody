@@ -5,13 +5,14 @@ class GameGenreView extends AbstractView {
     super();
     this.state = state;
     this.model = model;
+    this.audio = null;
   }
 
   get template() {
     const currentQuestion = this.model.data[this.state.level];
 
     const tracks = currentQuestion.answers.map((track, index) => `
-    <div id="${index}"class="track">
+    <div id="${index}"class="track ${this.state.debug && track.genre === currentQuestion.genre ? `debug-correct` : ``}">
       <button class="track__button track__button--play" type="button"></button>
       <div class="track__status">
         <audio src="${track.src}"></audio>
@@ -63,13 +64,33 @@ class GameGenreView extends AbstractView {
         const trackId = controlBtn.closest(`.track`).id;
 
         if (controlBtn.classList.contains(`track__button--play`)) {
+          if (this.audio) {
+            this.audio.pause();
+            this.audio = null;
+          } else {
+            this.audio = tracksAudio[trackId];
+            this.audio.play();
+          }
+
+          const lastPlaying = this._el.querySelector(`.track__button--pause`);
+          if (lastPlaying) {
+            lastPlaying.classList.remove(`track__button--pause`);
+            lastPlaying.classList.add(`track__button--play`);
+          }
+
           controlBtn.classList.remove(`track__button--play`);
           controlBtn.classList.add(`track__button--pause`);
-          tracksAudio[trackId].play();
+
+          this.audio = tracksAudio[trackId];
+          this.audio.play();
+
+
         } else if (controlBtn.classList.contains(`track__button--pause`)) {
           controlBtn.classList.remove(`track__button--pause`);
           controlBtn.classList.add(`track__button--play`);
-          tracksAudio[trackId].pause();
+
+          this.audio.pause();
+          this.audio = null;
         }
       }
     });
@@ -78,6 +99,11 @@ class GameGenreView extends AbstractView {
   }
 
   onAnswer() { }
+
+  destroy() {
+    this.audio.pause();
+    this.audio = null;
+  }
 
   formValidation() {
     return this._el.querySelectorAll(`.game__input:checked`).length;

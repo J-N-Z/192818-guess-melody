@@ -12,6 +12,9 @@ export default class HeaderView extends AbstractView {
     const minutes = addLeadZero(new Date(this.state.time).getMinutes());
     const seconds = addLeadZero(Math.round((this.state.time - minutes * 60 * 1000) / 1000));
 
+    const lives = new Array(this.state.lives).fill(`<div class="correct"></div>`).join(``);
+    const mistakes = new Array(LIVES - this.state.lives).fill(`<div class="wrong"></div>`).join(``);
+
     return `
       <header class="game__header">
         <a class="game__back" href="#">
@@ -31,7 +34,8 @@ export default class HeaderView extends AbstractView {
         </div>
 
         <div class="game__mistakes">
-          ${new Array(LIVES - this.state.lives).fill(`<div class="wrong"></div>`).join(``)}
+          ${lives}
+          ${mistakes}
         </div>
       </header>`;
   }

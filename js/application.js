@@ -1,5 +1,5 @@
 
-import {renderView} from './utils.js';
+import {renderView, calculateTotalScore} from './utils.js';
 import GameModel from './game-model';
 import GameScreen from './game-screen';
 import WelcomeScreen from './welcome-screen';
@@ -10,13 +10,7 @@ import LoadingView from './loading-view.js';
 // import ModalConfirmView from './modal-confirm.js';
 import ModalErrorView from './modal-error.js';
 
-const checkStatus = (response) => {
-  if (response.status >= 200 && response.status < 300) {
-    return response;
-  } else {
-    throw new Error(`${response.status} ${response.text}`);
-  }
-};
+import Loader from './loader.js';
 
 let gameData;
 
@@ -25,9 +19,7 @@ export default class Application {
   static start() {
     const loading = new LoadingView();
     renderView(loading.element);
-    fetch(`https://es.dump.academy/guess-melody/questions`)
-      .then(checkStatus)
-      .then((response) => response.json())
+    Loader.loadData()
       .then((data) => (gameData = data))
       .then(() => Application.showWelcome())
       .catch(Application.showError);
@@ -58,9 +50,19 @@ export default class Application {
   }
 
   static showStats(state) {
-    const stats = new ResultSuccessView(state);
-    stats.onReplay = () => Application.showWelcome();
-    renderView(stats.element);
+    const loading = new LoadingView();
+    renderView(loading.element);
+
+    const userResults = calculateTotalScore(state.userAnswers, state.lives);
+
+    Loader.saveResults(userResults.totalScore)
+      .then(() => Loader.loadResults())
+      .then((scoreResults) => {
+        const mappedScoreResults = scoreResults.map((item) => item.score);
+        const stats = new ResultSuccessView(mappedScoreResults, userResults, state);
+        stats.onReplay = () => Application.showWelcome();
+        renderView(stats.element);
+      });
   }
 
   static showError(error) {
