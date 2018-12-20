@@ -45,7 +45,7 @@ class GameArtistView extends AbstractView {
       this.onArtistChange(evt, answer);
     });
 
-    this.audio = new Audio(this.currentQuestion.src);
+    this.audio = this.model.audioData[this.currentQuestion.src];
 
     const controlBtn = this._el.querySelector(`.track__button`);
     controlBtn.addEventListener(`click`, () => {

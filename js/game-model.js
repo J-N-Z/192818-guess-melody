@@ -2,8 +2,9 @@ import INITIAL_STATE from './data';
 import {decreaseLives} from './utils';
 
 export default class GameModel {
-  constructor(data) {
+  constructor(data, audioData) {
     this.data = data;
+    this.audioData = audioData;
     this.restart();
   }
 

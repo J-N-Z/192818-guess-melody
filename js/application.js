@@ -1,5 +1,5 @@
 
-import {renderView, calculateTotalScore} from './utils.js';
+import { renderView, calculateTotalScore, removeDupsInArray } from './utils.js';
 import GameModel from './game-model';
 import GameScreen from './game-screen';
 import WelcomeScreen from './welcome-screen';
@@ -12,7 +12,16 @@ import ModalErrorView from './modal-error.js';
 
 import Loader from './loader.js';
 
+const loadAudio = (src) => {
+  return new Promise((resolve, reject) => {
+    const audio = new Audio(src);
+    audio.onloadeddata = () => resolve({src, audio});
+    audio.onerror = () => reject(`load audio error`);
+  });
+};
+
 let gameData;
+let audioData;
 
 export default class Application {
 
@@ -20,7 +29,38 @@ export default class Application {
     const loading = new LoadingView();
     renderView(loading.element);
     Loader.loadData()
-      .then((data) => (gameData = data))
+      .then((questions) => {
+        gameData = questions;
+        return questions;
+      })
+      .then((questions) => {
+        let audioSrcArr = [];
+
+        questions.forEach((question) => {
+          if (question.type === `artist`) {
+            audioSrcArr.push(question.src);
+          } else {
+            question.answers.forEach((answer) => {
+              audioSrcArr.push(answer.src);
+            });
+          }
+        });
+        console.log('audioSrcArr', audioSrcArr);
+
+        const shakedAudioSrcArr = removeDupsInArray(audioSrcArr);
+
+        console.log('shakedAudioSrcArr', shakedAudioSrcArr);
+
+        return shakedAudioSrcArr.map((src) => loadAudio(src));
+      })
+      .then((audioPromises) => Promise.all(audioPromises))
+      .then((audioObjects) => {
+        const audioMappedObject = {};
+        audioObjects.forEach((obj) => {
+          audioMappedObject[[obj.src]] = obj.audio;
+        });
+        return (audioData = audioMappedObject);
+      })
       .then(() => Application.showWelcome())
       .catch(Application.showError);
   }
@@ -31,7 +71,7 @@ export default class Application {
   }
 
   static showGame() {
-    const model = new GameModel(gameData);
+    const model = new GameModel(gameData, audioData);
     const gameScreen = new GameScreen(model);
     renderView(gameScreen.getElementByType(model.data[model.state.level][`type`]));
     gameScreen.startGame();

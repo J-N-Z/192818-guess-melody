@@ -2,17 +2,17 @@ import {FAST_ANSWER_MAX_TIME} from './constants.js';
 import {LIVES} from './constants.js';
 
 
-export function renderView(view) {
+export const renderView = (view) => {
   const sectionMain = document.querySelector(`.main`);
 
   sectionMain.innerHTML = ``;
   sectionMain.appendChild(view);
-}
+};
 
-export function updateView(container, view) {
+export const updateView = (container, view) => {
   container.innerHTML = ``;
   container.appendChild(view);
-}
+};
 
 // old version
 
@@ -34,7 +34,7 @@ export function updateView(container, view) {
 //   return totalScore;
 // }
 
-export function calculateTotalScore(answersArr, lives) {
+export const calculateTotalScore = (answersArr, lives) => {
   let totalScore = 0;
 
   const mistakes = LIVES - lives;
@@ -51,7 +51,7 @@ export function calculateTotalScore(answersArr, lives) {
     fastAnswers,
     mistakes
   };
-}
+};
 
 // old
 
@@ -73,7 +73,7 @@ export function calculateTotalScore(answersArr, lives) {
 //   return `Вы заняли ${rank} место из ${sortedStats.length} игроков. Это лучше, чем у ${beatenPercents}% игроков`;
 // }
 
-export function getResults(statistics, currentResult) {
+export const getResults = (statistics, currentResult) => {
   const stats = [...statistics];
   stats.push(currentResult.score);
 
@@ -82,9 +82,9 @@ export function getResults(statistics, currentResult) {
   const beatenPercents = (sortedStats.length - rank) / (sortedStats.length - 1) * 100;
 
   return `Вы заняли ${rank} место из ${sortedStats.length} игроков. Это лучше, чем у ${beatenPercents}% игроков`;
-}
+};
 
-export function decreaseLives(_lives) {
+export const decreaseLives = (_lives) => {
   if (_lives > 0) {
     _lives--;
   } else {
@@ -92,12 +92,18 @@ export function decreaseLives(_lives) {
   }
 
   return _lives;
-}
+};
 
-export function timeCountdown(_seconds) {
+export const timeCountdown = (_seconds) => {
   return --_seconds;
-}
+};
 
-export function addLeadZero(number) {
+export const addLeadZero = (number) => {
   return number.toString().length < 2 ? `0${number}` : number;
-}
+};
+
+export const removeDupsInArray = (arr) => {
+  let newObj = {};
+  arr.forEach((item) => (newObj[item] = item));
+  return Object.keys(newObj);
+};
