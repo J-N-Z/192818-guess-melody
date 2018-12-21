@@ -1,5 +1,5 @@
 
-import { renderView, calculateTotalScore, removeDupsInArray } from './utils.js';
+import {renderView, calculateTotalScore, removeDupsInArray} from './utils.js';
 import GameModel from './game-model';
 import GameScreen from './game-screen';
 import WelcomeScreen from './welcome-screen';
@@ -45,11 +45,11 @@ export default class Application {
             });
           }
         });
-        console.log('audioSrcArr', audioSrcArr);
+        // console.log('audioSrcArr', audioSrcArr);
 
         const shakedAudioSrcArr = removeDupsInArray(audioSrcArr);
 
-        console.log('shakedAudioSrcArr', shakedAudioSrcArr);
+        // console.log('shakedAudioSrcArr', shakedAudioSrcArr);
 
         return shakedAudioSrcArr.map((src) => loadAudio(src));
       })
