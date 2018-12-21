@@ -5,7 +5,6 @@ class GameArtistView extends AbstractView {
     super();
     this.state = state;
     this.model = model;
-    this.audio = null;
   }
 
   get currentQuestion() {
@@ -45,27 +44,22 @@ class GameArtistView extends AbstractView {
       this.onArtistChange(evt, answer);
     });
 
-    this.audio = this.model.audioData[this.currentQuestion.src];
+    this.state.audio = this.model.audioData[this.currentQuestion.src];
 
     const controlBtn = this._el.querySelector(`.track__button`);
     controlBtn.addEventListener(`click`, () => {
       if (controlBtn.classList.contains(`track__button--play`)) {
         controlBtn.classList.remove(`track__button--play`);
         controlBtn.classList.add(`track__button--pause`);
-        this.audio.play();
+        this.state.audio.play();
       } else if (controlBtn.classList.contains(`track__button--pause`)) {
         controlBtn.classList.remove(`track__button--pause`);
         controlBtn.classList.add(`track__button--play`);
-        this.audio.pause();
+        this.state.audio.pause();
       }
     });
 
     controlBtn.click();
-  }
-
-  destroy() {
-    this.audio.pause();
-    this.audio = null;
   }
 
   onArtistChange() { }

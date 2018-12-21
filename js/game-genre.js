@@ -5,7 +5,6 @@ class GameGenreView extends AbstractView {
     super();
     this.state = state;
     this.model = model;
-    this.audio = null;
   }
 
   get template() {
@@ -66,12 +65,12 @@ class GameGenreView extends AbstractView {
         const trackId = controlBtn.closest(`.track`).id;
 
         if (controlBtn.classList.contains(`track__button--play`)) {
-          if (this.audio) {
-            this.audio.pause();
-            this.audio = null;
+          if (this.state.audio) {
+            this.state.audio.pause();
+            this.state.audio = null;
           } else {
-            this.audio = tracksAudio[trackId];
-            this.audio.play();
+            this.state.audio = tracksAudio[trackId];
+            this.state.audio.play();
           }
 
           const lastPlaying = this._el.querySelector(`.track__button--pause`);
@@ -83,16 +82,16 @@ class GameGenreView extends AbstractView {
           controlBtn.classList.remove(`track__button--play`);
           controlBtn.classList.add(`track__button--pause`);
 
-          this.audio = tracksAudio[trackId];
-          this.audio.play();
+          this.state.audio = tracksAudio[trackId];
+          this.state.audio.play();
 
 
         } else if (controlBtn.classList.contains(`track__button--pause`)) {
           controlBtn.classList.remove(`track__button--pause`);
           controlBtn.classList.add(`track__button--play`);
 
-          this.audio.pause();
-          this.audio = null;
+          this.state.audio.pause();
+          this.state.audio = null;
         }
       }
     });
@@ -101,13 +100,6 @@ class GameGenreView extends AbstractView {
   }
 
   onAnswer() { }
-
-  destroy() {
-    if (this.audio) {
-      this.audio.pause();
-      this.audio = null;
-    }
-  }
 
   formValidation() {
     return this._el.querySelectorAll(`.game__input:checked`).length;

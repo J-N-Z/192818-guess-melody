@@ -79,7 +79,7 @@ export const getResults = (statistics, currentResult) => {
 
   const sortedStats = stats.sort((a, b) => b - a);
   const rank = sortedStats.indexOf(currentResult.score) + 1;
-  const beatenPercents = (sortedStats.length - rank) / (sortedStats.length - 1) * 100;
+  const beatenPercents = Math.round((sortedStats.length - rank) / (sortedStats.length - 1) * 100);
 
   return `Вы заняли ${rank} место из ${sortedStats.length} игроков. Это лучше, чем у ${beatenPercents}% игроков`;
 };

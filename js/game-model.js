@@ -32,4 +32,12 @@ export default class GameModel {
   tick() {
     this._state = Object.assign({}, this._state, {time: this._state.time - 1000});
   }
+
+  stopPlaying() {
+    if (this._state.audio) {
+      this._state.audio.pause();
+      this._state.audio.currentTime = 0;
+      this._state.audio = null;
+    }
+  }
 }

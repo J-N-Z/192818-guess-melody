@@ -10,7 +10,11 @@ export default class GameScreen {
     this.model = model;
 
     this.headerView = new HeaderView(this.model.state);
-    this.headerView.onReplay = () => Application.showWelcome();
+    this.headerView.onReplay = () => {
+      this.model.stopPlaying();
+      this.stopGame();
+      Application.showWelcome();
+    };
     this.header = this.headerView.element;
 
     this.root = document.createElement(`div`);
@@ -24,7 +28,11 @@ export default class GameScreen {
       gameEl.children[0].remove();
 
       this.headerView = new HeaderView(this.model.state);
-      this.headerView.onReplay = () => Application.showWelcome();
+      this.headerView.onReplay = () => {
+        this.model.stopPlaying();
+        this.stopGame();
+        Application.showWelcome();
+      };
       this.header = this.headerView.element;
 
       if (this.model.state.time < TIME_TO_WARNING) {
@@ -45,17 +53,6 @@ export default class GameScreen {
       this._timer = setTimeout(() => this._tick(), 1000);
     } else {
       Application.showFailTime();
-    }
-  }
-
-  wrongAnswer() {
-    // если ответ неправильный уменьшаем жизни или рендерим экран поражения
-    if (this.model.state.lives > 0) {
-      this.model.decreaseLives();
-      this.updateHeader();
-    } else {
-      this.stopGame();
-      Application.showFailTries();
     }
   }
 
@@ -86,10 +83,20 @@ export default class GameScreen {
     return false;
   }
 
+  wrongAnswer() {
+    // если ответ неправильный уменьшаем жизни или рендерим экран поражения
+    if (this.model.state.lives > 0) {
+      this.model.decreaseLives();
+      this.updateHeader();
+    } else {
+      this.stopGame();
+      this.model.stopPlaying();
+      Application.showFailTries();
+    }
+  }
+
   getElementByType(type) {
     let element = null;
-
-    // console.log(`this.model.state`, this.model.state);
 
     switch (type) {
       case `genre`:
@@ -107,14 +114,15 @@ export default class GameScreen {
             const answerTime = this.beginQuestionTime - this.model.state.time;
             this.model.state.userAnswers.push(answerTime);
 
-            myGameGenreView.destroy();
+            this.model.stopPlaying();
 
             // переключаемся на следующий вопрос, если они остались
             if (this.model.state.level < this.model.data.length - 1) {
               this.model.nextLevel();
               this.getElementByType(this.model.data[this.model.state.level][`type`]);
             } else {
-              Application.showStats(this.model.state);
+              this.stopGame();
+              Application.showStats(this.model);
             }
           } else {
             this.wrongAnswer();
@@ -138,14 +146,15 @@ export default class GameScreen {
               const answerTime = this.beginQuestionTime - this.model.state.time;
               this.model.state.userAnswers.push(answerTime);
 
-              myGameArtistView.destroy();
+              this.model.stopPlaying();
 
               // переключаемся на следующий вопрос, если они остались
               if (this.model.state.level < this.model.data.length - 1) {
                 this.model.nextLevel();
                 this.getElementByType(this.model.data[this.model.state.level][`type`]);
               } else {
-                Application.showStats(this.model.state);
+                this.stopGame();
+                Application.showStats(this.model);
               }
             } else {
               this.wrongAnswer();

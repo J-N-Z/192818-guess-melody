@@ -79,28 +79,28 @@ export default class Application {
 
   static showFailTries() {
     const failTries = new FailTriesView();
-    failTries.onReplay = () => Application.showWelcome();
+    failTries.onReplay = () => Application.showGame();
     renderView(failTries.element);
   }
 
   static showFailTime() {
     const failTime = new FailTimeView();
-    failTime.onReplay = () => Application.showWelcome();
+    failTime.onReplay = () => Application.showGame();
     renderView(failTime.element);
   }
 
-  static showStats(state) {
+  static showStats(model) {
     const loading = new LoadingView();
     renderView(loading.element);
 
-    const userResults = calculateTotalScore(state.userAnswers, state.lives);
+    const userResults = calculateTotalScore(model.state.userAnswers, model.state.lives);
 
     Loader.saveResults(userResults.totalScore)
       .then(() => Loader.loadResults())
       .then((scoreResults) => {
         const mappedScoreResults = scoreResults.map((item) => item.score);
-        const stats = new ResultSuccessView(mappedScoreResults, userResults, state);
-        stats.onReplay = () => Application.showWelcome();
+        const stats = new ResultSuccessView(mappedScoreResults, userResults, model.state);
+        stats.onReplay = () => Application.showGame();
         renderView(stats.element);
       });
   }

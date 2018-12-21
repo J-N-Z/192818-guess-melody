@@ -5,6 +5,7 @@ export default {
   lives: LIVES,
   time: TIME,
   level: 0,
+  audio: null,
 
   userAnswers: [],
 
