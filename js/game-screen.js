@@ -64,26 +64,20 @@ export default class GameScreen {
       const rightAnswers = currentQuestionAnswers.filter((answer) => answer.genre === currentQuestion.genre);
 
       if (userAnswer.length === rightAnswers.length) {
-        if (userAnswer.every((answer) => rightAnswers.some((rightAnswer) => answer === rightAnswer[currentType]))) {
-          // console.log(`answer is correct!`);
-          return true;
-        }
+        return userAnswer.every((answer) => rightAnswers.some((rightAnswer) => answer === rightAnswer[currentType]));
       }
     } else if (currentType === `artist`) {
       const currentQuestion = this.model.data[this.model.state.level];
       const currentQuestionAnswers = currentQuestion[`answers`];
       const rightAnswer = currentQuestionAnswers.filter((answer) => answer.isCorrect)[0];
 
-      if (userAnswer === rightAnswer.title) {
-        // console.log(`answer is correct!`);
-        return true;
-      }
+      return userAnswer === rightAnswer.title;
     }
 
     return false;
   }
 
-  wrongAnswer() {
+  doWrongAnswer() {
     // если ответ неправильный уменьшаем жизни или рендерим экран поражения
     if (this.model.state.lives > 0) {
       this.model.decreaseLives();
@@ -107,7 +101,6 @@ export default class GameScreen {
         const myGameGenreView = new GameGenreView(this.model.state, this.model);
         myGameGenreView.onAnswer = (evt, answer) => {
           evt.preventDefault();
-          // console.log(`answer`, answer);
 
           if (this.isAnswerCorrect(answer)) {
             // записать в userAnswers время ответа
@@ -118,14 +111,14 @@ export default class GameScreen {
 
             // переключаемся на следующий вопрос, если они остались
             if (this.model.state.level < this.model.data.length - 1) {
-              this.model.nextLevel();
+              this.model.getNextLevel();
               this.getElementByType(this.model.data[this.model.state.level][`type`]);
             } else {
               this.stopGame();
               Application.showStats(this.model);
             }
           } else {
-            this.wrongAnswer();
+            this.doWrongAnswer();
           }
         };
 
@@ -140,7 +133,6 @@ export default class GameScreen {
         const myGameArtistView = new GameArtistView(this.model.state, this.model);
         myGameArtistView.onArtistChange = (evt, answer) => {
           if (evt.target.classList.contains(`artist__input`)) {
-            // console.log(`answer`, answer);
 
             if (this.isAnswerCorrect(answer)) {
               const answerTime = this.beginQuestionTime - this.model.state.time;
@@ -150,14 +142,14 @@ export default class GameScreen {
 
               // переключаемся на следующий вопрос, если они остались
               if (this.model.state.level < this.model.data.length - 1) {
-                this.model.nextLevel();
+                this.model.getNextLevel();
                 this.getElementByType(this.model.data[this.model.state.level][`type`]);
               } else {
                 this.stopGame();
                 Application.showStats(this.model);
               }
             } else {
-              this.wrongAnswer();
+              this.doWrongAnswer();
             }
           }
         };

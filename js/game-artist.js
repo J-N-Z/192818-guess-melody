@@ -1,6 +1,6 @@
 import AbstractView from './abstract-view';
 
-class GameArtistView extends AbstractView {
+export default class GameArtistView extends AbstractView {
   constructor(state, model) {
     super();
     this.state = state;
@@ -64,6 +64,3 @@ class GameArtistView extends AbstractView {
 
   onArtistChange() { }
 }
-
-
-export default GameArtistView;

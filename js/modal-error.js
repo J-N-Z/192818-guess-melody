@@ -1,6 +1,6 @@
 import AbstractView from './abstract-view';
 
-class ModalErrorView extends AbstractView {
+export default class ModalErrorView extends AbstractView {
   constructor(error) {
     super();
     this.error = error;
@@ -14,5 +14,3 @@ class ModalErrorView extends AbstractView {
     </section>`;
   }
 }
-
-export default ModalErrorView;

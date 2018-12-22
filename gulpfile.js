@@ -105,8 +105,8 @@ gulp.task(`build`, [`assemble`], () => {
   gulp.start(`imagemin`);
 });
 
-gulp.task(`test`, function () {
-  return gulp
+gulp.task(`test`, () => {
+  gulp
   .src([`js/**/*.test.js`])
   .pipe(rollup({
     plugins: [

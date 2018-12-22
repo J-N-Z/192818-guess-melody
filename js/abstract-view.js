@@ -1,4 +1,4 @@
-class AbstractView {
+export default class AbstractView {
   constructor() {
     this._el = null;
   }
@@ -20,5 +20,3 @@ class AbstractView {
 
   bind() { }
 }
-
-export default AbstractView;

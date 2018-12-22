@@ -7,7 +7,6 @@ import FailTimeView from './fail-time.js';
 import FailTriesView from './fail-tries.js';
 import ResultSuccessView from './result-success.js';
 import LoadingView from './loading-view.js';
-// import ModalConfirmView from './modal-confirm.js';
 import ModalErrorView from './modal-error.js';
 
 import Loader from './loader.js';
@@ -34,7 +33,7 @@ export default class Application {
         return questions;
       })
       .then((questions) => {
-        let audioSrcArr = [];
+        const audioSrcArr = [];
 
         questions.forEach((question) => {
           if (question.type === `artist`) {
@@ -45,11 +44,8 @@ export default class Application {
             });
           }
         });
-        // console.log('audioSrcArr', audioSrcArr);
 
         const shakedAudioSrcArr = removeDupsInArray(audioSrcArr);
-
-        // console.log('shakedAudioSrcArr', shakedAudioSrcArr);
 
         return shakedAudioSrcArr.map((src) => loadAudio(src));
       })

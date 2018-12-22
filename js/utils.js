@@ -70,7 +70,7 @@ export const addLeadZero = (number) => {
 
 
 export const removeDupsInArray = (arr) => {
-  let newObj = {};
+  const newObj = {};
   arr.forEach((item) => (newObj[item] = item));
   return Object.keys(newObj);
 };

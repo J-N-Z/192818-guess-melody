@@ -1,6 +1,6 @@
 import AbstractView from './abstract-view';
 
-class ModalConfirmView extends AbstractView {
+export default class ModalConfirmView extends AbstractView {
   get element() {
     return `
     <section class="modal">
@@ -24,5 +24,3 @@ class ModalConfirmView extends AbstractView {
 
   onCancel() { }
 }
-
-export default ModalConfirmView;

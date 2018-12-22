@@ -1,6 +1,6 @@
 import AbstractView from './abstract-view';
 
-class FailTimeView extends AbstractView {
+export default class FailTimeView extends AbstractView {
   get template() {
     return `
     <section class="result">
@@ -18,5 +18,3 @@ class FailTimeView extends AbstractView {
 
   onReplay() { }
 }
-
-export default FailTimeView;

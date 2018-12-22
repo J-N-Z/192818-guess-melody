@@ -1,6 +1,6 @@
 import AbstractView from './abstract-view';
 
-class GameGenreView extends AbstractView {
+export default class GameGenreView extends AbstractView {
   constructor(state, model) {
     super();
     this.state = state;
@@ -105,5 +105,3 @@ class GameGenreView extends AbstractView {
     return this._el.querySelectorAll(`.game__input:checked`).length;
   }
 }
-
-export default GameGenreView;

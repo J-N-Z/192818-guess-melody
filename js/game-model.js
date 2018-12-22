@@ -17,7 +17,7 @@ export default class GameModel {
     this._state.userAnswers = [];
   }
 
-  nextLevel() {
+  getNextLevel() {
     this._state = Object.assign({}, this._state, {level: this._state.level + 1});
   }
 
