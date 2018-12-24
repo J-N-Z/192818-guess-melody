@@ -55,7 +55,7 @@ export default class GameGenreView extends AbstractView {
 
     tracksForm.addEventListener(`change`, (evt) => {
       if (evt.target.classList.contains(`game__input`)) {
-        answerBtn.disabled = !this.formValidation();
+        answerBtn.disabled = !this.formValidate();
       }
     });
 
@@ -101,7 +101,7 @@ export default class GameGenreView extends AbstractView {
 
   onAnswer() { }
 
-  formValidation() {
+  formValidate() {
     return this._el.querySelectorAll(`.game__input:checked`).length;
   }
 }

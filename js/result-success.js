@@ -1,5 +1,5 @@
 import AbstractView from './abstract-view';
-import {TIME} from './constants.js';
+import {Time} from './constants.js';
 import {getResults} from './utils.js';
 
 
@@ -12,15 +12,8 @@ class ResultSuccessView extends AbstractView {
   }
 
   get template() {
-    const timeSpentInSeconds = (TIME - this.state.time) / 1000;
-    const minutesSpent = (() => {
-      if (timeSpentInSeconds >= 60) {
-        return timeSpentInSeconds % 60;
-      } else {
-        return 0;
-      }
-    })();
-
+    const timeSpentInSeconds = (Time.TOTAL_TIME - this.state.time) / 1000;
+    const minutesSpent = Math.floor(timeSpentInSeconds / 60);
     const secondsSpent = timeSpentInSeconds - minutesSpent * 60;
     const statistics = getResults(this.scoreResults, {score: this.userResults.totalScore});
 

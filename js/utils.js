@@ -1,4 +1,4 @@
-import {FAST_ANSWER_MAX_TIME} from './constants.js';
+import {Time} from './constants.js';
 import {LIVES} from './constants.js';
 
 
@@ -10,17 +10,11 @@ export const renderView = (view) => {
 };
 
 
-export const updateView = (container, view) => {
-  container.innerHTML = ``;
-  container.appendChild(view);
-};
-
-
 export const calculateTotalScore = (answersArr, lives) => {
   let totalScore = 0;
 
   const mistakes = LIVES - lives;
-  const fastAnswers = answersArr.filter((answer) => answer < FAST_ANSWER_MAX_TIME).length;
+  const fastAnswers = answersArr.filter((answer) => answer < Time.FAST_ANSWER_MAX_TIME).length;
 
   totalScore = answersArr.length - mistakes * 2;
 
@@ -48,19 +42,19 @@ export const getResults = (statistics, currentResult) => {
 };
 
 
-export const decreaseLives = (_lives) => {
-  if (_lives > 0) {
-    _lives--;
+export const decreaseLives = (lives) => {
+  if (lives > 0) {
+    lives--;
   } else {
     return false;
   }
 
-  return _lives;
+  return lives;
 };
 
 
-export const timeCountdown = (_seconds) => {
-  return --_seconds;
+export const timeCountdown = (seconds) => {
+  return --seconds;
 };
 
 

@@ -2,7 +2,7 @@ import HeaderView from './header.js';
 import GameGenreView from './game-genre.js';
 import GameArtistView from './game-artist.js';
 import Application from './application.js';
-import {TIME_TO_WARNING} from './constants.js';
+import {Time} from './constants.js';
 
 
 export default class GameScreen {
@@ -23,9 +23,9 @@ export default class GameScreen {
   }
 
   updateHeader() {
-    const gameEl = document.querySelector(`.game`);
-    if (gameEl) {
-      gameEl.children[0].remove();
+    const gameElement = document.querySelector(`.game`);
+    if (gameElement) {
+      gameElement.children[0].remove();
 
       this.headerView = new HeaderView(this.model.state);
       this.headerView.onReplay = () => {
@@ -35,21 +35,22 @@ export default class GameScreen {
       };
       this.header = this.headerView.element;
 
-      if (this.model.state.time < TIME_TO_WARNING) {
-        const timerEl = this.header.querySelector(`.timer__value`);
-        if (!timerEl.classList.contains(`timer__value--finished`)) {
-          timerEl.classList.add(`timer__value--finished`);
+      if (this.model.state.time < Time.TIME_TO_WARNING) {
+        const timerElement = this.header.querySelector(`.timer__value`);
+        if (!timerElement.classList.contains(`timer__value--finished`)) {
+          timerElement.classList.add(`timer__value--finished`);
         }
       }
 
-      gameEl.insertBefore(this.header, gameEl.children[0]);
+      gameElement.insertBefore(this.header, gameElement.children[0]);
     }
   }
 
   _tick() {
     if (this.model.state.time > 0) {
-      this.model.tick();
       this.updateHeader();
+      this.model.tick();
+
       this._timer = setTimeout(() => this._tick(), 1000);
     } else {
       Application.showFailTime();
