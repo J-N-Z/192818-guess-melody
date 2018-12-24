@@ -17,7 +17,7 @@ export default class GameArtistView extends AbstractView {
     <div class="artist ${this.state.debug && artist.isCorrect ? `debug-correct` : ``}">
       <input class="artist__input visually-hidden" type="radio" name="answer" value="${artist.title}" id="answer-${index}">
       <label class="artist__name" for="answer-${index}">
-        <img class="artist__picture" src="http://placehold.it/134x134" alt="${artist.title}">
+        <img class="artist__picture" src="${artist.image.url}" alt="${artist.title}">
         ${artist.title}
       </label>
     </div>`
