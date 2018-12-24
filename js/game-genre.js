@@ -35,6 +35,10 @@ export default class GameGenreView extends AbstractView {
   `;
   }
 
+  formValidate() {
+    return this._el.querySelectorAll(`.game__input:checked`).length;
+  }
+
   bind() {
     const tracksAudio = [];
 
@@ -100,8 +104,4 @@ export default class GameGenreView extends AbstractView {
   }
 
   onAnswer() { }
-
-  formValidate() {
-    return this._el.querySelectorAll(`.game__input:checked`).length;
-  }
 }
