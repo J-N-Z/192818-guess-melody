@@ -35,7 +35,7 @@ export default class GameScreen {
       };
       this.header = this.headerView.element;
 
-      if (this.model.state.time < Time.TIME_TO_WARNING) {
+      if (this.model.state.time < Time.WARNING) {
         const timerElement = this.header.querySelector(`.timer__value`);
         if (!timerElement.classList.contains(`timer__value--finished`)) {
           timerElement.classList.add(`timer__value--finished`);

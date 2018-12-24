@@ -12,7 +12,7 @@ class ResultSuccessView extends AbstractView {
   }
 
   get template() {
-    const timeSpentInSeconds = (Time.TOTAL_TIME - this.state.time) / 1000;
+    const timeSpentInSeconds = (Time.TOTAL - this.state.time) / 1000;
     const minutesSpent = Math.floor(timeSpentInSeconds / 60);
     const secondsSpent = timeSpentInSeconds - minutesSpent * 60;
     const statistics = getResults(this.scoreResults, {score: this.userResults.totalScore});

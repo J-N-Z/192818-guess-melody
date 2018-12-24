@@ -14,7 +14,7 @@ export const calculateTotalScore = (answersArr, lives) => {
   let totalScore = 0;
 
   const mistakes = LIVES - lives;
-  const fastAnswers = answersArr.filter((answer) => answer < Time.FAST_ANSWER_MAX_TIME).length;
+  const fastAnswers = answersArr.filter((answer) => answer < Time.MAX_FOR_FAST_ANSWER).length;
 
   totalScore = answersArr.length - mistakes * 2;
 

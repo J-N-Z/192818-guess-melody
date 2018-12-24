@@ -3,7 +3,7 @@ import {LIVES} from './constants.js';
 
 export default {
   lives: LIVES,
-  time: Time.TOTAL_TIME,
+  time: Time.TOTAL,
   level: 0,
   audio: null,
 
