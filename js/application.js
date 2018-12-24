@@ -55,7 +55,8 @@ export default class Application {
         audioObjects.forEach((obj) => {
           audioMappedObject[[obj.src]] = obj.audio;
         });
-        return (audioData = audioMappedObject);
+        audioData = audioMappedObject;
+        return audioData;
       })
       .then(() => Application.showWelcome())
       .catch(Application.showError);

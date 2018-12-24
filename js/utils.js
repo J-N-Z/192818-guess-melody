@@ -2,6 +2,8 @@ import {Time} from './constants.js';
 import {LIVES} from './constants.js';
 
 
+const MISTAKES_FACTOR = 2;
+
 export const renderView = (view) => {
   const sectionMain = document.querySelector(`.main`);
 
@@ -11,16 +13,10 @@ export const renderView = (view) => {
 
 
 export const calculateTotalScore = (answersArr, lives) => {
-  let totalScore = 0;
-
   const mistakes = LIVES - lives;
   const fastAnswers = answersArr.filter((answer) => answer < Time.MAX_FOR_FAST_ANSWER).length;
 
-  totalScore = answersArr.length - mistakes * 2;
-
-  if (fastAnswers > 0) {
-    totalScore += fastAnswers;
-  }
+  const totalScore = answersArr.length - mistakes * MISTAKES_FACTOR + fastAnswers;
 
   return {
     totalScore,
@@ -42,15 +38,7 @@ export const getResults = (statistics, currentResult) => {
 };
 
 
-export const decreaseLives = (lives) => {
-  if (lives > 0) {
-    lives--;
-  } else {
-    return false;
-  }
-
-  return lives;
-};
+export const decreaseLives = (lives) => (lives > 0) ? --lives : false;
 
 
 export const timeCountdown = (seconds) => {

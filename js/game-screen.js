@@ -4,6 +4,10 @@ import GameArtistView from './game-artist.js';
 import Application from './application.js';
 import {Time} from './constants.js';
 
+const GameType = {
+  GENRE: `genre`,
+  ARTIST: `artist`
+};
 
 export default class GameScreen {
   constructor(model) {
@@ -59,7 +63,7 @@ export default class GameScreen {
 
   isAnswerCorrect(userAnswer) {
     const currentType = this.model.data[this.model.state.level][`type`];
-    if (currentType === `genre`) {
+    if (currentType === GameType.GENRE) {
       const currentQuestion = this.model.data[this.model.state.level];
       const currentQuestionAnswers = currentQuestion[`answers`];
       const rightAnswers = currentQuestionAnswers.filter((answer) => answer.genre === currentQuestion.genre);
@@ -67,7 +71,7 @@ export default class GameScreen {
       if (userAnswer.length === rightAnswers.length) {
         return userAnswer.every((answer) => rightAnswers.some((rightAnswer) => answer === rightAnswer[currentType]));
       }
-    } else if (currentType === `artist`) {
+    } else if (currentType === GameType.ARTIST) {
       const currentQuestion = this.model.data[this.model.state.level];
       const currentQuestionAnswers = currentQuestion[`answers`];
       const rightAnswer = currentQuestionAnswers.filter((answer) => answer.isCorrect)[0];
@@ -94,7 +98,7 @@ export default class GameScreen {
     let element = null;
 
     switch (type) {
-      case `genre`:
+      case GameType.GENRE:
         element = document.createElement(`section`);
         element.className = `game game-${type}`;
         element.appendChild(this.header);
@@ -126,7 +130,7 @@ export default class GameScreen {
         element.appendChild(myGameGenreView.element);
         break;
 
-      case `artist`:
+      case GameType.ARTIST:
         element = document.createElement(`section`);
         element.className = `game game-${type}`;
         element.appendChild(this.header);
