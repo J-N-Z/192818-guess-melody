@@ -9,7 +9,7 @@ export default {
 
   userAnswers: [],
 
-  debug: false
+  debug: true
 };
 
 
